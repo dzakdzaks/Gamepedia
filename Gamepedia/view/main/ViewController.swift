@@ -17,10 +17,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     
     private let footerView = UIActivityIndicatorView(style: .large)
-
-    private let dataCellIdentifier = "DataCell"
     
-    var searchTimer: Timer?
+    private let dataCellIdentifier = "DataCell"
     
     private let vm: MainViewModel = MainViewModel()
     
@@ -37,18 +35,30 @@ class ViewController: UIViewController {
     }
     
     private func setup() {
-
+        
         title = "Gamepedia"
         
-        searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Games"
         
+        searchController.searchBar
+            .rx.text
+            .orEmpty
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .subscribe(onNext: { query in
+                if self.vm.searchKey != self.searchController.searchBar.text {
+                    self.vm.searchKey = query
+                    self.getData()
+                }
+            }
+            ).disposed(by: vm.disposeBag)
+        
         navigationItem.searchController = searchController
-                
+        
         definesPresentationContext = true
-
-                        
+        
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Order by", style: .plain, target: self, action: #selector(showOrderByMenu(sender:)))
         
         collectionView?.delegate = self
@@ -112,7 +122,7 @@ class ViewController: UIViewController {
         )
         
         let orderByList = generateOrderBy()
-
+        
         for item in orderByList {
             if item.value == "Clear" {
                 alert.addAction(.init(title: item.value, style: .destructive) { action in
@@ -145,11 +155,11 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: dataCellIdentifier, for: indexPath) as! GameCollectionViewCell
-            
+        
         let game = vm.gamesSearches[indexPath.row]
-                            
+        
         cell.view.clipsToBounds = true
         cell.view.layer.cornerRadius = 10
         
@@ -163,7 +173,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         cell.layerRating.layer.cornerRadius = 10
         cell.layerRating.backgroundColor = .black.withAlphaComponent(0.5)
         cell.labelRating.text = "\(String(describing: game.rating!)) / \(String(describing: game.ratingTop!))"
-                    
+        
         cell.labelName.sizeToFit()
         cell.labelName.text = game.name
         
@@ -182,24 +192,24 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 5
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 10
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionFooter {
-                   let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Footer", for: indexPath)
-                   footer.addSubview(footerView)
-                   footerView.frame = CGRect(x: 0, y: 0, width: collectionView.bounds.width, height: 50)
-                   return footer
-               }
+            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Footer", for: indexPath)
+            footer.addSubview(footerView)
+            footerView.frame = CGRect(x: 0, y: 0, width: collectionView.bounds.width, height: 50)
+            return footer
+        }
         return UICollectionReusableView()
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let endScrolling = (scrollView.contentOffset.y + scrollView.frame.size.height)
-
+        
         if !vm.isLoadMore && endScrolling >= scrollView.contentSize.height {
             vm.isLoadMore = true
             vm.page += 1
@@ -217,30 +227,11 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     
 }
 
-extension ViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        
-        guard let searchText = searchController.searchBar.text else { return }
-
-        if vm.searchKey != searchText {
-            self.searchTimer?.invalidate()
-            searchTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { timer in
-                DispatchQueue.global(qos: .userInteractive).async {
-                    DispatchQueue.main.async {
-                        self.vm.searchKey = searchText
-                        self.getData()
-                    }
-                }
-            }
-        }
-    }
-}
-
 class CollectionViewFooterView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
