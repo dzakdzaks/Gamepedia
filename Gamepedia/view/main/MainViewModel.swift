@@ -19,7 +19,7 @@ class MainViewModel {
     let disposeBag: DisposeBag = DisposeBag()
     
     var gamesSearches: [Game] = []
-    
+        
     var searchKey: String = ""
     var ordering: String = ""
     var page: Int = 1

@@ -19,6 +19,8 @@ struct Game: Codable {
     let genres: [Genre]?
     let esrbRating: EsrbRating?
     var descriptionRaw: String?
+    var developers: [Developer]?
+    var publishers: [Publisher]?
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -31,6 +33,8 @@ struct Game: Codable {
         case genres
         case esrbRating = "esrb_rating"
         case descriptionRaw = "description_raw"
+        case developers
+        case publishers
     }
     
     init(from decoder: Decoder) throws {
@@ -45,7 +49,8 @@ struct Game: Codable {
         genres = (try? container.decode([Genre].self, forKey: .genres)) ?? nil
         esrbRating = (try? container.decode(EsrbRating.self, forKey: .esrbRating)) ?? nil
         descriptionRaw = (try? container.decode(String?.self, forKey: .descriptionRaw)) ?? "-"
-        
+        developers = (try? container.decode([Developer].self, forKey: .developers))
+        publishers = (try? container.decode([Publisher].self, forKey: .publishers))
     }
     
     func getImageURL() -> URL? {

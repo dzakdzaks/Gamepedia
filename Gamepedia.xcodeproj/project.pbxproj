@@ -27,6 +27,8 @@
 		A49B77B026FC17F4005A078C /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49B77AF26FC17F4005A078C /* Client.swift */; };
 		A49B77B226FC2319005A078C /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49B77B126FC2319005A078C /* API.swift */; };
 		A49B77B726FC5DB7005A078C /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49B77B626FC5DB7005A078C /* MainViewModel.swift */; };
+		A49B77B926FD7659005A078C /* Developer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49B77B826FD7659005A078C /* Developer.swift */; };
+		A49B77BB26FD7680005A078C /* Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49B77BA26FD7680005A078C /* Publisher.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +54,8 @@
 		A49B77AF26FC17F4005A078C /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		A49B77B126FC2319005A078C /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		A49B77B626FC5DB7005A078C /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		A49B77B826FD7659005A078C /* Developer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Developer.swift; sourceTree = "<group>"; };
+		A49B77BA26FD7680005A078C /* Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Publisher.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +141,8 @@
 				A451A3FE26F86DCF00D83DE0 /* ParentPlatform.swift */,
 				A451A40026F86EC100D83DE0 /* Genre.swift */,
 				A451A40226F87E8500D83DE0 /* EsrbRating.swift */,
+				A49B77B826FD7659005A078C /* Developer.swift */,
+				A49B77BA26FD7680005A078C /* Publisher.swift */,
 			);
 			path = data;
 			sourceTree = "<group>";
@@ -295,7 +301,9 @@
 				A451A40326F87E8500D83DE0 /* EsrbRating.swift in Sources */,
 				A451A3E226F3194700D83DE0 /* GameCollectionViewCell.swift in Sources */,
 				A49B77B226FC2319005A078C /* API.swift in Sources */,
+				A49B77B926FD7659005A078C /* Developer.swift in Sources */,
 				A49B77B726FC5DB7005A078C /* MainViewModel.swift in Sources */,
+				A49B77BB26FD7680005A078C /* Publisher.swift in Sources */,
 				A49B77B026FC17F4005A078C /* Client.swift in Sources */,
 				A451A3EC26F46B7100D83DE0 /* OrderBy.swift in Sources */,
 				A451A3C426F1CA2C00D83DE0 /* AppDelegate.swift in Sources */,

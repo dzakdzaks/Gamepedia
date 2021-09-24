@@ -26,9 +26,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .dark
-    
         setup()
         observeState()
     }
@@ -141,15 +138,6 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: GameDetailDelegate {
-    func onDataChanged(_ game: Game) {
-        guard let index = vm.selectedGameRow else {
-            return
-        }
-        vm.gamesSearches[index] = game
-    }
-}
-
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -223,9 +211,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         vm.selectedGameRow = indexPath.row
         guard let vc = storyboard?.instantiateViewController(identifier: "DetailGame") as? DetailViewController else { return }
         
-        guard let gameSelectedRow = vm.selectedGameRow else { return }
-        vc.game = vm.gamesSearches[gameSelectedRow]
-        vc.delegate = self
+        vc.vm = vm
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
