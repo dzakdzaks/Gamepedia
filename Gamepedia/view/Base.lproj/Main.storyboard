@@ -57,8 +57,8 @@
                                                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tY7-oU-yOx">
                                                     <rect key="frame" x="161" y="0.0" width="39" height="28"/>
                                                     <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star_fill" translatesAutoresizingMaskIntoConstraints="NO" id="MbH-Yy-Wwd">
-                                                            <rect key="frame" x="6" y="6" width="16" height="16"/>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="MbH-Yy-Wwd">
+                                                            <rect key="frame" x="6" y="5.5" width="16" height="16"/>
                                                             <color key="tintColor" systemColor="systemOrangeColor"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="16" id="VQA-xo-yB4"/>
@@ -168,8 +168,8 @@
                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cKx-c0-qPn">
                                                 <rect key="frame" x="0.0" y="274" width="40" height="28"/>
                                                 <subviews>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star_fill" translatesAutoresizingMaskIntoConstraints="NO" id="SWr-fE-b3r">
-                                                        <rect key="frame" x="6" y="6" width="16" height="16"/>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="SWr-fE-b3r">
+                                                        <rect key="frame" x="6" y="5.5" width="16" height="16"/>
                                                         <color key="tintColor" systemColor="systemOrangeColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="16" id="MO4-y6-0KQ"/>
@@ -489,11 +489,11 @@
             </objects>
             <point key="canvasLocation" x="1213.0434782608697" y="-970.3125"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Home-->
         <scene sceneID="z6S-Kq-LHa">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="8br-aG-lwJ" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" systemItem="search" id="KkM-eO-UNu"/>
+                    <tabBarItem key="tabBarItem" title="Home" image="house" catalog="system" id="KkM-eO-UNu"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="DWj-HC-nGq">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
@@ -519,15 +519,74 @@
                     </tabBar>
                     <connections>
                         <segue destination="8br-aG-lwJ" kind="relationship" relationship="viewControllers" id="2RF-MZ-TwD"/>
+                        <segue destination="4HW-lh-vUN" kind="relationship" relationship="viewControllers" id="yDC-Nk-p3b"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xxE-ex-3pI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1407" y="-208"/>
         </scene>
+        <!--About-->
+        <scene sceneID="UY6-60-9oh">
+            <objects>
+                <navigationController id="4HW-lh-vUN" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="About" image="person.crop.circle" catalog="system" id="K2s-oK-Het"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="kZz-6B-jER">
+                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="mbK-1V-JQB" kind="relationship" relationship="rootViewController" id="65h-Vi-6sh"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Hd2-pN-keg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-581" y="-208"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="uqC-q3-Eho">
+            <objects>
+                <viewController id="mbK-1V-JQB" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vmB-Yb-1n3">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dzakdzaks" translatesAutoresizingMaskIntoConstraints="NO" id="agn-Kf-SNe">
+                                <rect key="frame" x="0.0" y="140" width="414" height="233"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="agn-Kf-SNe" secondAttribute="height" multiplier="16:9" id="om1-BM-xZy"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Muhammad Dzaky Rahmanto" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NNu-D0-eaY">
+                                <rect key="frame" x="16" y="397" width="382" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="JeG-Gd-IH7"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="JeG-Gd-IH7" firstAttribute="trailing" secondItem="NNu-D0-eaY" secondAttribute="trailing" constant="16" id="5tD-1N-IXX"/>
+                            <constraint firstItem="agn-Kf-SNe" firstAttribute="leading" secondItem="JeG-Gd-IH7" secondAttribute="leading" id="6HM-re-KQp"/>
+                            <constraint firstItem="NNu-D0-eaY" firstAttribute="leading" secondItem="JeG-Gd-IH7" secondAttribute="leading" constant="16" id="7dL-ZA-FYe"/>
+                            <constraint firstItem="NNu-D0-eaY" firstAttribute="top" secondItem="agn-Kf-SNe" secondAttribute="bottom" constant="24" id="JBJ-yY-wsg"/>
+                            <constraint firstItem="agn-Kf-SNe" firstAttribute="top" secondItem="JeG-Gd-IH7" secondAttribute="top" id="Scx-Xd-zMg"/>
+                            <constraint firstItem="agn-Kf-SNe" firstAttribute="trailing" secondItem="JeG-Gd-IH7" secondAttribute="trailing" id="y8r-nn-WVc"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="vE3-6o-Vcj"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0YS-cL-yuV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="311.59420289855075" y="-208.25892857142856"/>
+        </scene>
     </scenes>
     <resources>
-        <image name="star_fill" width="43" height="44"/>
+        <image name="dzakdzaks" width="768" height="768"/>
+        <image name="house" catalog="system" width="128" height="106"/>
+        <image name="person.crop.circle" catalog="system" width="128" height="121"/>
+        <image name="star.fill" catalog="system" width="128" height="116"/>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

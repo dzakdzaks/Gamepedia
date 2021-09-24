@@ -8,4 +8,5 @@ target 'Gamepedia' do
   # Pods for Gamepedia
   pod 'RxSwift', '6.2.0'
   pod 'RxCocoa', '6.2.0'
+  pod 'R.swift'
 end

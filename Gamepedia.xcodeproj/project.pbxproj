@@ -23,12 +23,14 @@
 		A451A3FF26F86DCF00D83DE0 /* ParentPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = A451A3FE26F86DCF00D83DE0 /* ParentPlatform.swift */; };
 		A451A40126F86EC100D83DE0 /* Genre.swift in Sources */ = {isa = PBXBuildFile; fileRef = A451A40026F86EC100D83DE0 /* Genre.swift */; };
 		A451A40326F87E8500D83DE0 /* EsrbRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = A451A40226F87E8500D83DE0 /* EsrbRating.swift */; };
+		A485D5AA26FDB04500E59599 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = A485D5A926FDB04500E59599 /* R.generated.swift */; };
 		A49B77AE26FC173E005A078C /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49B77AD26FC173E005A078C /* Resource.swift */; };
 		A49B77B026FC17F4005A078C /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49B77AF26FC17F4005A078C /* Client.swift */; };
 		A49B77B226FC2319005A078C /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49B77B126FC2319005A078C /* API.swift */; };
 		A49B77B726FC5DB7005A078C /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49B77B626FC5DB7005A078C /* MainViewModel.swift */; };
 		A49B77B926FD7659005A078C /* Developer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49B77B826FD7659005A078C /* Developer.swift */; };
 		A49B77BB26FD7680005A078C /* Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49B77BA26FD7680005A078C /* Publisher.swift */; };
+		A49B77BE26FDA854005A078C /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49B77BD26FDA854005A078C /* AboutViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,12 +52,14 @@
 		A451A3FE26F86DCF00D83DE0 /* ParentPlatform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentPlatform.swift; sourceTree = "<group>"; };
 		A451A40026F86EC100D83DE0 /* Genre.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Genre.swift; sourceTree = "<group>"; };
 		A451A40226F87E8500D83DE0 /* EsrbRating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EsrbRating.swift; sourceTree = "<group>"; };
+		A485D5A926FDB04500E59599 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		A49B77AD26FC173E005A078C /* Resource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resource.swift; sourceTree = "<group>"; };
 		A49B77AF26FC17F4005A078C /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		A49B77B126FC2319005A078C /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		A49B77B626FC5DB7005A078C /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		A49B77B826FD7659005A078C /* Developer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Developer.swift; sourceTree = "<group>"; };
 		A49B77BA26FD7680005A078C /* Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Publisher.swift; sourceTree = "<group>"; };
+		A49B77BD26FDA854005A078C /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +113,7 @@
 				A451A3CC26F1CA2D00D83DE0 /* Assets.xcassets */,
 				A451A3CE26F1CA2D00D83DE0 /* LaunchScreen.storyboard */,
 				A451A3D126F1CA2D00D83DE0 /* Info.plist */,
+				A485D5A926FDB04500E59599 /* R.generated.swift */,
 			);
 			path = Gamepedia;
 			sourceTree = "<group>";
@@ -126,6 +131,7 @@
 		A451A3D826F2EBA300D83DE0 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				A49B77BC26FDA845005A078C /* about */,
 				A451A3C926F1CA2C00D83DE0 /* Main.storyboard */,
 				A451A3F926F82CF900D83DE0 /* detail */,
 				A451A3D726F2EB7400D83DE0 /* main */,
@@ -165,6 +171,14 @@
 			path = service;
 			sourceTree = "<group>";
 		};
+		A49B77BC26FDA845005A078C /* about */ = {
+			isa = PBXGroup;
+			children = (
+				A49B77BD26FDA854005A078C /* AboutViewController.swift */,
+			);
+			path = about;
+			sourceTree = "<group>";
+		};
 		F6775F805D9F726CE6F6B9D7 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,6 +196,7 @@
 			buildConfigurationList = A451A3D426F1CA2D00D83DE0 /* Build configuration list for PBXNativeTarget "Gamepedia" */;
 			buildPhases = (
 				7796B77A69AF47AC32CCF9E0 /* [CP] Check Pods Manifest.lock */,
+				A485D5A826FDAF5100E59599 /* R Swift */,
 				A451A3BC26F1CA2C00D83DE0 /* Sources */,
 				A451A3BD26F1CA2C00D83DE0 /* Frameworks */,
 				A451A3BE26F1CA2C00D83DE0 /* Resources */,
@@ -288,6 +303,26 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		A485D5A826FDAF5100E59599 /* R Swift */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$TEMP_DIR/rswift-lastrun",
+			);
+			name = "R Swift";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/R.generated.swift",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/R.generated.swift\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -304,7 +339,9 @@
 				A49B77B926FD7659005A078C /* Developer.swift in Sources */,
 				A49B77B726FC5DB7005A078C /* MainViewModel.swift in Sources */,
 				A49B77BB26FD7680005A078C /* Publisher.swift in Sources */,
+				A49B77BE26FDA854005A078C /* AboutViewController.swift in Sources */,
 				A49B77B026FC17F4005A078C /* Client.swift in Sources */,
+				A485D5AA26FDB04500E59599 /* R.generated.swift in Sources */,
 				A451A3EC26F46B7100D83DE0 /* OrderBy.swift in Sources */,
 				A451A3C426F1CA2C00D83DE0 /* AppDelegate.swift in Sources */,
 				A451A3FF26F86DCF00D83DE0 /* ParentPlatform.swift in Sources */,

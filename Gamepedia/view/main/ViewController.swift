@@ -36,7 +36,8 @@ class ViewController: UIViewController {
     
     private func setup() {
         
-        title = "Gamepedia"
+        title = "Home"
+        navigationItem.title = "Gamepedia"
         
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Games"
@@ -219,10 +220,10 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         vm.selectedGameRow = indexPath.row
-        guard let vc = storyboard?.instantiateViewController(identifier: "DetailGame") as? DetailViewController else { return }
-        
+        guard let vc = R.storyboard.main.detailGame() else { return }
         vc.vm = vm
         self.navigationController?.pushViewController(vc, animated: true)
+        
     }
     
 }
