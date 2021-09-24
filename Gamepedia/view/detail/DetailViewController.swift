@@ -7,6 +7,7 @@
 
 import UIKit
 import SDWebImage
+import RxSwift
 
 protocol GameDetailDelegate: AnyObject {
     func onDataChanged(_ game: Game)
@@ -40,6 +41,10 @@ class DetailViewController: UIViewController {
     
     private var defaultHeightImage: CGFloat = 233
     
+    private let client = Client.client()
+    
+    private let disposeBag = DisposeBag()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -48,7 +53,6 @@ class DetailViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         // Make the navigation bar background clear
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
@@ -84,39 +88,33 @@ class DetailViewController: UIViewController {
     }
     
     private func callDataDetail() {
-        
         if game.descriptionRaw == "-" {
-            runTaskDetail(gameId: String(game.id))
+            callData(gameId: String(game.id))
         } else {
             setupData()
         }
     }
     
-    private func runTaskDetail(gameId: String) {
+    private func callData(gameId: String) {
         indicator.startAnimating()
-        getDetailGame(gameId: gameId, onSuccess: { game in
-            DispatchQueue.main.async {
-                self.indicator.stopAnimating()
-                self.game?.descriptionRaw = game.descriptionRaw
-                self.delegate?.onDataChanged(self.game)
-                self.setupData()
-            }
-        }, onFailure: { msg in
-            DispatchQueue.main.async {
-                self.indicator.stopAnimating()
-                print(msg)
-            }
-        })
+        client.getGameDetail(gameId: gameId)
+            .observe(on: MainScheduler.instance)
+            .subscribe(
+                onNext: { game in
+                    self.game?.descriptionRaw = game.descriptionRaw
+                    self.delegate?.onDataChanged(self.game)
+                    self.setupData()
+                }, onError: { error in
+                    self.indicator.stopAnimating()
+                    print(error)
+                }, onCompleted: {
+                    self.indicator.stopAnimating()
+                }, onDisposed: nil
+            ).disposed(by: disposeBag)
+        
     }
     
     private func setupData() {
-        //        let transformer = SDImageResizingTransformer(size: CGSize(width: imageGame.bounds.width * 1.5, height: imageGame.bounds.height * 1.5), scaleMode: .aspectFill)
-        
-        //        imageGame.sd_setImage(
-        //            with: game.getImageURL(),
-        //            placeholderImage: UIImage(systemName: "photo"),
-        //            context: [.imageTransformer: transformer])
-        
         
         labelName.text = game.name
         
@@ -161,15 +159,9 @@ extension DetailViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         let offsetY = scrollview.contentOffset.y
-    
+        
         if offsetY <= 0 {
             constrainImageTop.constant = offsetY
-    
-            
-//            let output = defaultHeightImage - offsetY
-//            let halfScreenHeight = view.frame.height / 2
-//            let height = output > halfScreenHeight ? halfScreenHeight : output
-            
             constraintImageHeight.constant = defaultHeightImage - offsetY
         }
         
@@ -183,6 +175,6 @@ extension DetailViewController: UIScrollViewDelegate {
             navigationController?.navigationBar.isTranslucent = true
             title = ""
         }
-            
+        
     }
 }

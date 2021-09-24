@@ -336,25 +336,24 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="rRA-YW-lh7">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="245"/>
+                                                <rect key="frame" x="0.0" y="274" width="414" height="37"/>
                                             </activityIndicatorView>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="9iJ-Vg-Yto" secondAttribute="trailing" constant="6" id="3S7-NT-ffR"/>
+                                            <constraint firstAttribute="trailing" secondItem="rRA-YW-lh7" secondAttribute="trailing" id="9h6-oM-oJ5"/>
                                             <constraint firstItem="aL9-F7-cN5" firstAttribute="leading" secondItem="Z9t-go-Byl" secondAttribute="leading" id="AZr-UC-hQL"/>
                                             <constraint firstAttribute="bottom" secondItem="8kv-7Z-dc6" secondAttribute="bottom" constant="20" id="Gtc-J6-bw0"/>
+                                            <constraint firstItem="rRA-YW-lh7" firstAttribute="leading" secondItem="Z9t-go-Byl" secondAttribute="leading" id="JzE-DE-fpY"/>
                                             <constraint firstItem="sij-VR-PZN" firstAttribute="top" secondItem="Y2h-ST-RQj" secondAttribute="bottom" constant="16" id="Kjl-UE-sOm"/>
                                             <constraint firstItem="sij-VR-PZN" firstAttribute="trailing" secondItem="aL9-F7-cN5" secondAttribute="trailing" id="NB1-vR-9EM"/>
-                                            <constraint firstItem="rRA-YW-lh7" firstAttribute="leading" secondItem="Z9t-go-Byl" secondAttribute="leading" id="Q5C-Pd-lC8"/>
-                                            <constraint firstAttribute="trailing" secondItem="rRA-YW-lh7" secondAttribute="trailing" id="VaF-tg-L10"/>
                                             <constraint firstItem="sij-VR-PZN" firstAttribute="leading" secondItem="cKx-c0-qPn" secondAttribute="leading" id="WNA-md-sa6"/>
                                             <constraint firstAttribute="trailing" secondItem="Y2h-ST-RQj" secondAttribute="trailing" constant="6" id="Wv2-5m-9ly"/>
                                             <constraint firstItem="Y2h-ST-RQj" firstAttribute="leading" secondItem="Z9t-go-Byl" secondAttribute="leading" constant="6" id="XEl-4s-XDU"/>
-                                            <constraint firstItem="9iJ-Vg-Yto" firstAttribute="top" secondItem="rRA-YW-lh7" secondAttribute="bottom" id="XyB-lB-tEi"/>
-                                            <constraint firstItem="rRA-YW-lh7" firstAttribute="top" secondItem="Z9t-go-Byl" secondAttribute="top" id="baU-4A-nYL"/>
                                             <constraint firstItem="9iJ-Vg-Yto" firstAttribute="leading" secondItem="Z9t-go-Byl" secondAttribute="leading" constant="6" id="fnY-Tn-R11"/>
                                             <constraint firstItem="cKx-c0-qPn" firstAttribute="leading" secondItem="Z9t-go-Byl" secondAttribute="leading" id="fsc-CR-l5d"/>
+                                            <constraint firstItem="rRA-YW-lh7" firstAttribute="top" secondItem="9iJ-Vg-Yto" secondAttribute="bottom" id="h7e-TB-EZ0"/>
                                             <constraint firstItem="9iJ-Vg-Yto" firstAttribute="top" secondItem="aL9-F7-cN5" secondAttribute="bottom" constant="12" id="iBq-l1-ptF"/>
                                             <constraint firstItem="8kv-7Z-dc6" firstAttribute="top" secondItem="sij-VR-PZN" secondAttribute="bottom" constant="6" id="khw-mx-5ky"/>
                                             <constraint firstItem="Y2h-ST-RQj" firstAttribute="top" secondItem="cKx-c0-qPn" secondAttribute="bottom" constant="16" id="lrk-hy-pLi"/>

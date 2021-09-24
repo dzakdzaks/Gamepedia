@@ -7,6 +7,7 @@
 
 import UIKit
 import SDWebImage
+import RxSwift
 
 class ViewController: UIViewController {
     
@@ -15,21 +16,13 @@ class ViewController: UIViewController {
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     
+    private let footerView = UIActivityIndicatorView(style: .large)
+
     private let dataCellIdentifier = "DataCell"
-   
-    private var gamesSearches: [Game] = []
-    private var selectedGameRow: Int? = nil
-    
-    private var searchKey: String = ""
-    private var ordering: String = ""
-    private var page: Int = 1
-    
-    private var isLoadMore: Bool = false
     
     var searchTimer: Timer?
     
-    private let footerView = UIActivityIndicatorView(style: .large)
-
+    private let vm: MainViewModel = MainViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,8 +30,7 @@ class ViewController: UIViewController {
 //        UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .dark
     
         setup()
-        
-        getData(isFromLoadMore: false)
+        observeState()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -72,38 +64,47 @@ class ViewController: UIViewController {
         
     }
     
-    private func getData(isFromLoadMore: Bool) {
-        if isFromLoadMore {
-            isLoadMore = true
-            footerView.startAnimating()
-        } else {
-            gamesSearches.removeAll()
-            collectionView?.reloadData()
-            loadingIndicator.startAnimating()
-        }
-        getGames(searchKey: searchKey, ordering: ordering, page: String(page), pageSize: "10", onSuccess: { games in
-            DispatchQueue.main.async {
-                if isFromLoadMore {
-                    self.isLoadMore = false
-                    self.footerView.stopAnimating()
-                    self.gamesSearches.insert(contentsOf: games.games, at: self.gamesSearches.count)
-                } else {
-                    self.loadingIndicator.stopAnimating()
-                    self.gamesSearches.insert(contentsOf: games.games, at: 0)
+    private func observeState() {
+        vm.state.observe(on: MainScheduler.instance)
+            .subscribe { event in
+                guard let state = event.element else {return}
+                switch state {
+                case .loading:
+                    if self.vm.isLoadMore {
+                        self.footerView.startAnimating()
+                    } else {
+                        self.vm.gamesSearches.removeAll()
+                        self.collectionView?.reloadData()
+                        self.loadingIndicator.startAnimating()
+                    }
+                    break
+                case .idle:
+                    break
+                case .complete:
+                    if self.vm.isLoadMore {
+                        self.vm.isLoadMore = false
+                        self.footerView.stopAnimating()
+                    } else {
+                        self.loadingIndicator.stopAnimating()
+                    }
+                    self.collectionView?.reloadData()
+                    break
+                case let .error(msg):
+                    if self.vm.isLoadMore {
+                        self.vm.isLoadMore = false
+                        self.footerView.stopAnimating()
+                    } else {
+                        self.loadingIndicator.stopAnimating()
+                    }
+                    print(msg)
+                    break
                 }
-                self.collectionView?.reloadData()
             }
-        }, onFailure: { msg in
-            DispatchQueue.main.async {
-                if isFromLoadMore {
-                    self.isLoadMore = false
-                    self.footerView.stopAnimating()
-                } else {
-                    self.loadingIndicator.stopAnimating()
-                }
-                print(msg)
-            }
-        })
+            .disposed(by: vm.disposeBag)
+    }
+    
+    private func getData() {
+        vm.getGames(searchKey: vm.searchKey, ordering: vm.ordering, page: String(vm.page), pageSize: vm.pageSize)
     }
     
     @objc private func showOrderByMenu(sender: UIBarButtonItem) {
@@ -118,16 +119,16 @@ class ViewController: UIViewController {
         for item in orderByList {
             if item.value == "Clear" {
                 alert.addAction(.init(title: item.value, style: .destructive) { action in
-                    self.ordering = ""
-                    self.page = 1
-                    self.getData(isFromLoadMore: false)
+                    self.vm.ordering = ""
+                    self.vm.page = 1
+                    self.getData()
                 })
             } else {
                 alert.addAction(.init(title: item.value, style: .default) { action in
                     if let index = alert.actions.firstIndex(of: action) {
-                        self.ordering = orderByList[index].key
-                        self.page = 1
-                        self.getData(isFromLoadMore: false)
+                        self.vm.ordering = orderByList[index].key
+                        self.vm.page = 1
+                        self.getData()
                     }
                 })
             }
@@ -142,24 +143,24 @@ class ViewController: UIViewController {
 
 extension ViewController: GameDetailDelegate {
     func onDataChanged(_ game: Game) {
-        guard let index = selectedGameRow else {
+        guard let index = vm.selectedGameRow else {
             return
         }
-        gamesSearches[index] = game
+        vm.gamesSearches[index] = game
     }
 }
 
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        gamesSearches.count
+        vm.gamesSearches.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
             
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: dataCellIdentifier, for: indexPath) as! GameCollectionViewCell
             
-        let game = gamesSearches[indexPath.row]
+        let game = vm.gamesSearches[indexPath.row]
                             
         cell.view.clipsToBounds = true
         cell.view.layer.cornerRadius = 10
@@ -211,18 +212,19 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let endScrolling = (scrollView.contentOffset.y + scrollView.frame.size.height)
 
-        if !isLoadMore && endScrolling >= scrollView.contentSize.height {
-            page += 1
-            getData(isFromLoadMore: true)
+        if !vm.isLoadMore && endScrolling >= scrollView.contentSize.height {
+            vm.isLoadMore = true
+            vm.page += 1
+            getData()
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.selectedGameRow = indexPath.row
+        vm.selectedGameRow = indexPath.row
         guard let vc = storyboard?.instantiateViewController(identifier: "DetailGame") as? DetailViewController else { return }
         
-        guard let gameSelectedRow = selectedGameRow else { return }
-        vc.game = gamesSearches[gameSelectedRow]
+        guard let gameSelectedRow = vm.selectedGameRow else { return }
+        vc.game = vm.gamesSearches[gameSelectedRow]
         vc.delegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -234,13 +236,13 @@ extension ViewController: UISearchResultsUpdating {
         
         guard let searchText = searchController.searchBar.text else { return }
 
-        if searchKey != searchText {
+        if vm.searchKey != searchText {
             self.searchTimer?.invalidate()
             searchTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { timer in
                 DispatchQueue.global(qos: .userInteractive).async {
                     DispatchQueue.main.async {
-                        self.searchKey = searchText
-                        self.getData(isFromLoadMore: false)
+                        self.vm.searchKey = searchText
+                        self.getData()
                     }
                 }
             }
