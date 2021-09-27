@@ -37,6 +37,7 @@
 		A4F7D9D22701AB08006020F9 /* LocalGameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F7D9D12701AB08006020F9 /* LocalGameModel.swift */; };
 		A4F7D9D72701C4C5006020F9 /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F7D9D62701C4C5006020F9 /* FavoriteViewController.swift */; };
 		A4F7D9D92701C5B6006020F9 /* FavoriteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F7D9D82701C5B6006020F9 /* FavoriteViewModel.swift */; };
+		A4F7D9DF2701E42F006020F9 /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F7D9DE2701E42F006020F9 /* ProfileModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,7 @@
 		A4F7D9D12701AB08006020F9 /* LocalGameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalGameModel.swift; sourceTree = "<group>"; };
 		A4F7D9D62701C4C5006020F9 /* FavoriteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
 		A4F7D9D82701C5B6006020F9 /* FavoriteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewModel.swift; sourceTree = "<group>"; };
+		A4F7D9DE2701E42F006020F9 /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +158,7 @@
 		A451A3DA26F2EBBA00D83DE0 /* data */ = {
 			isa = PBXGroup;
 			children = (
+				A4F7D9DD2701E3F4006020F9 /* userdefault */,
 				A4F7D9CC2701A925006020F9 /* coredata */,
 				A451A3DF26F2EF2400D83DE0 /* Game.swift */,
 				A451A3EB26F46B7100D83DE0 /* OrderBy.swift */,
@@ -211,6 +214,14 @@
 				A4F7D9D82701C5B6006020F9 /* FavoriteViewModel.swift */,
 			);
 			path = favorite;
+			sourceTree = "<group>";
+		};
+		A4F7D9DD2701E3F4006020F9 /* userdefault */ = {
+			isa = PBXGroup;
+			children = (
+				A4F7D9DE2701E42F006020F9 /* ProfileModel.swift */,
+			);
+			path = userdefault;
 			sourceTree = "<group>";
 		};
 		F6775F805D9F726CE6F6B9D7 /* Pods */ = {
@@ -418,6 +429,7 @@
 				A49B77B026FC17F4005A078C /* Client.swift in Sources */,
 				A485D5AA26FDB04500E59599 /* R.generated.swift in Sources */,
 				A451A3EC26F46B7100D83DE0 /* OrderBy.swift in Sources */,
+				A4F7D9DF2701E42F006020F9 /* ProfileModel.swift in Sources */,
 				A451A3C426F1CA2C00D83DE0 /* AppDelegate.swift in Sources */,
 				A451A3FF26F86DCF00D83DE0 /* ParentPlatform.swift in Sources */,
 				A49B77AE26FC173E005A078C /* Resource.swift in Sources */,

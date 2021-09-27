@@ -553,10 +553,10 @@
             </objects>
             <point key="canvasLocation" x="-581" y="-208"/>
         </scene>
-        <!--View Controller-->
+        <!--About View Controller-->
         <scene sceneID="uqC-q3-Eho">
             <objects>
-                <viewController id="mbK-1V-JQB" sceneMemberID="viewController">
+                <viewController id="mbK-1V-JQB" customClass="AboutViewController" customModule="Gamepedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vmB-Yb-1n3">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -567,7 +567,7 @@
                                     <constraint firstAttribute="width" secondItem="agn-Kf-SNe" secondAttribute="height" multiplier="16:9" id="om1-BM-xZy"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Muhammad Dzaky Rahmanto" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NNu-D0-eaY">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NNu-D0-eaY">
                                 <rect key="frame" x="16" y="397" width="382" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -586,6 +586,10 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="vE3-6o-Vcj"/>
+                    <connections>
+                        <outlet property="imageProfle" destination="vmB-Yb-1n3" id="6U4-8c-Ubx"/>
+                        <outlet property="labelName" destination="NNu-D0-eaY" id="KhC-vt-TDV"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0YS-cL-yuV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
