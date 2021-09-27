@@ -112,9 +112,7 @@ class DetailViewController: UIViewController {
         
         defaultHeightImage = UIScreen.main.bounds.width / 2
         constraintImageHeight.constant = defaultHeightImage
-        
-        buttonFavorite.addTarget(self, action: #selector(favoriteButtonClicked(sender:)), for: .touchUpInside)
-        
+                
         gameProvider.isGameAlreadyFavorited(gameId: game.id) { isAlreadyFavorited in
             DispatchQueue.main.async {
                 if isAlreadyFavorited {
@@ -155,6 +153,8 @@ class DetailViewController: UIViewController {
     }
     
     private func setupData() {
+        
+        buttonFavorite.addTarget(self, action: #selector(favoriteButtonClicked(sender:)), for: .touchUpInside)
         
         labelName.text = game.name
         
@@ -237,15 +237,16 @@ class DetailViewController: UIViewController {
         
         defaultHeightImage = UIScreen.main.bounds.width / 2
         constraintImageHeight.constant = defaultHeightImage
-        
-        buttonFavorite.addTarget(self, action: #selector(favoriteButtonClicked(sender:)), for: .touchUpInside)
-        
+                
         self.buttonFavorite.setImage(UIImage(systemName: "star.fill"), for: .normal)
         
         setupDataLocal()
     }
     
     private func setupDataLocal() {
+       
+        buttonFavorite.addTarget(self, action: #selector(favoriteButtonClicked(sender:)), for: .touchUpInside)
+
         labelName.text = favoriteGame.name
         
         labelRating.text = "\(String(describing: favoriteGame.rating!)) / \(String(describing: favoriteGame.ratingTop!))"
