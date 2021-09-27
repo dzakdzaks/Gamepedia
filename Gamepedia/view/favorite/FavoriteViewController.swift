@@ -21,17 +21,7 @@ class FavoriteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        
-        viewModel.successFetchData.observe(on: MainScheduler.instance)
-            .subscribe { event in
-                guard let state = event.element else {return}
-                
-                if state == true {
-                    self.collectionView.reloadData()
-                    self.viewModel.successFetchData.accept(false)
-                }
-            }
-            .disposed(by: viewModel.disposeBag)
+        observeData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -46,6 +36,35 @@ class FavoriteViewController: UIViewController {
         
         collectionView?.delegate = self
         collectionView?.dataSource = self
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "trash"), style: .plain, target: self, action: #selector(deleteAllFavorite(sender:)))
+    }
+    
+    private func observeData() {
+        viewModel.successFetchData.observe(on: MainScheduler.instance)
+            .subscribe { event in
+                guard let state = event.element else {return}
+                
+                if state == true {
+                    self.collectionView.reloadData()
+                    self.viewModel.successFetchData.accept(false)
+                }
+            }
+            .disposed(by: viewModel.disposeBag)
+    }
+    
+    @objc private func deleteAllFavorite(sender: UIBarButtonItem) {
+        let alert = UIAlertController(title: "Warning", message: "Do you want to delete all favorite games?", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Yes", style: .default) { _ in
+            self.viewModel.gameProvider.deleteAllGame {
+                self.viewModel.getFavoriteGames()
+            }
+        })
+        
+        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true, completion: nil)
     }
 
 }

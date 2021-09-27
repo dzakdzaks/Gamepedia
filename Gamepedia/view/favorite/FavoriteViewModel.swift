@@ -11,7 +11,7 @@ import RxRelay
 
 class FavoriteViewModel {
     
-    private lazy var gameProvider: GameProvider = { return GameProvider() }()
+    lazy var gameProvider: GameProvider = { return GameProvider() }()
     
     let disposeBag = DisposeBag()
     
