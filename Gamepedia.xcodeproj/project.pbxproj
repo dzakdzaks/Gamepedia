@@ -31,6 +31,12 @@
 		A49B77B926FD7659005A078C /* Developer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49B77B826FD7659005A078C /* Developer.swift */; };
 		A49B77BB26FD7680005A078C /* Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49B77BA26FD7680005A078C /* Publisher.swift */; };
 		A49B77BE26FDA854005A078C /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49B77BD26FDA854005A078C /* AboutViewController.swift */; };
+		A4F7D9BE2701774A006020F9 /* API-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4F7D9BD2701774A006020F9 /* API-Info.plist */; };
+		A4F7D9CB2701A7EE006020F9 /* FavoriteGame.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A4F7D9C92701A7EE006020F9 /* FavoriteGame.xcdatamodeld */; };
+		A4F7D9D02701A97A006020F9 /* GameProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F7D9CF2701A97A006020F9 /* GameProvider.swift */; };
+		A4F7D9D22701AB08006020F9 /* LocalGameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F7D9D12701AB08006020F9 /* LocalGameModel.swift */; };
+		A4F7D9D72701C4C5006020F9 /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F7D9D62701C4C5006020F9 /* FavoriteViewController.swift */; };
+		A4F7D9D92701C5B6006020F9 /* FavoriteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F7D9D82701C5B6006020F9 /* FavoriteViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +66,12 @@
 		A49B77B826FD7659005A078C /* Developer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Developer.swift; sourceTree = "<group>"; };
 		A49B77BA26FD7680005A078C /* Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Publisher.swift; sourceTree = "<group>"; };
 		A49B77BD26FDA854005A078C /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		A4F7D9BD2701774A006020F9 /* API-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "API-Info.plist"; sourceTree = "<group>"; };
+		A4F7D9CA2701A7EE006020F9 /* FavoriteGame.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FavoriteGame.xcdatamodel; sourceTree = "<group>"; };
+		A4F7D9CF2701A97A006020F9 /* GameProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameProvider.swift; sourceTree = "<group>"; };
+		A4F7D9D12701AB08006020F9 /* LocalGameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalGameModel.swift; sourceTree = "<group>"; };
+		A4F7D9D62701C4C5006020F9 /* FavoriteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
+		A4F7D9D82701C5B6006020F9 /* FavoriteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +126,7 @@
 				A451A3CE26F1CA2D00D83DE0 /* LaunchScreen.storyboard */,
 				A451A3D126F1CA2D00D83DE0 /* Info.plist */,
 				A485D5A926FDB04500E59599 /* R.generated.swift */,
+				A4F7D9BD2701774A006020F9 /* API-Info.plist */,
 			);
 			path = Gamepedia;
 			sourceTree = "<group>";
@@ -131,6 +144,7 @@
 		A451A3D826F2EBA300D83DE0 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				A4F7D9D32701BF36006020F9 /* favorite */,
 				A49B77BC26FDA845005A078C /* about */,
 				A451A3C926F1CA2C00D83DE0 /* Main.storyboard */,
 				A451A3F926F82CF900D83DE0 /* detail */,
@@ -142,6 +156,7 @@
 		A451A3DA26F2EBBA00D83DE0 /* data */ = {
 			isa = PBXGroup;
 			children = (
+				A4F7D9CC2701A925006020F9 /* coredata */,
 				A451A3DF26F2EF2400D83DE0 /* Game.swift */,
 				A451A3EB26F46B7100D83DE0 /* OrderBy.swift */,
 				A451A3FE26F86DCF00D83DE0 /* ParentPlatform.swift */,
@@ -179,6 +194,25 @@
 			path = about;
 			sourceTree = "<group>";
 		};
+		A4F7D9CC2701A925006020F9 /* coredata */ = {
+			isa = PBXGroup;
+			children = (
+				A4F7D9C92701A7EE006020F9 /* FavoriteGame.xcdatamodeld */,
+				A4F7D9CF2701A97A006020F9 /* GameProvider.swift */,
+				A4F7D9D12701AB08006020F9 /* LocalGameModel.swift */,
+			);
+			path = coredata;
+			sourceTree = "<group>";
+		};
+		A4F7D9D32701BF36006020F9 /* favorite */ = {
+			isa = PBXGroup;
+			children = (
+				A4F7D9D62701C4C5006020F9 /* FavoriteViewController.swift */,
+				A4F7D9D82701C5B6006020F9 /* FavoriteViewModel.swift */,
+			);
+			path = favorite;
+			sourceTree = "<group>";
+		};
 		F6775F805D9F726CE6F6B9D7 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -201,6 +235,8 @@
 				A451A3BD26F1CA2C00D83DE0 /* Frameworks */,
 				A451A3BE26F1CA2C00D83DE0 /* Resources */,
 				3B2FE37DBB1CDB0C7262FA86 /* [CP] Embed Pods Frameworks */,
+				A4F7D9BF270178EE006020F9 /* Check API-Info.plist is exist or not */,
+				A4F7D9C227018112006020F9 /* Swift Lint */,
 			);
 			buildRules = (
 			);
@@ -258,6 +294,7 @@
 				A451A3D026F1CA2D00D83DE0 /* LaunchScreen.storyboard in Resources */,
 				A451A3CD26F1CA2D00D83DE0 /* Assets.xcassets in Resources */,
 				A451A3CB26F1CA2C00D83DE0 /* Main.storyboard in Resources */,
+				A4F7D9BE2701774A006020F9 /* API-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,6 +360,42 @@
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/R.generated.swift\"\n";
 		};
+		A4F7D9BF270178EE006020F9 /* Check API-Info.plist is exist or not */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Check API-Info.plist is exist or not";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nCONFIG_FILE_BASE_NAME=\"API-Info\"\nCONFIG_FILE_NAME=${CONFIG_FILE_BASE_NAME}.plist\nSAMPLE_CONFIG_FILE_NAME=${CONFIG_FILE_BASE_NAME}-Sample.plist\nCONFIG_FILE_PATH=$SRCROOT/$PRODUCT_NAME/$CONFIG_FILE_NAME\nSAMPLE_CONFIG_FILE_PATH=$SRCROOT/$PRODUCT_NAME/$SAMPLE_CONFIG_FILE_NAME\nif [ -f \"$CONFIG_FILE_PATH\" ]; then\n  echo \"$CONFIG_FILE_PATH exists.\"\nelse\n  echo \"$CONFIG_FILE_PATH does not exist, copying sample\"\n  cp -v \"${SAMPLE_CONFIG_FILE_PATH}\" \"${CONFIG_FILE_PATH}\"\nfi\n";
+		};
+		A4F7D9C227018112006020F9 /* Swift Lint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Swift Lint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#if which swiftlint >/dev/null; then\n#  swiftlint\n#else\n#  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n \n#\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -334,6 +407,8 @@
 				A451A3F826F492DC00D83DE0 /* SceneDelegate.swift in Sources */,
 				A451A3E026F2EF2400D83DE0 /* Game.swift in Sources */,
 				A451A40326F87E8500D83DE0 /* EsrbRating.swift in Sources */,
+				A4F7D9D92701C5B6006020F9 /* FavoriteViewModel.swift in Sources */,
+				A4F7D9D72701C4C5006020F9 /* FavoriteViewController.swift in Sources */,
 				A451A3E226F3194700D83DE0 /* GameCollectionViewCell.swift in Sources */,
 				A49B77B226FC2319005A078C /* API.swift in Sources */,
 				A49B77B926FD7659005A078C /* Developer.swift in Sources */,
@@ -346,8 +421,11 @@
 				A451A3C426F1CA2C00D83DE0 /* AppDelegate.swift in Sources */,
 				A451A3FF26F86DCF00D83DE0 /* ParentPlatform.swift in Sources */,
 				A49B77AE26FC173E005A078C /* Resource.swift in Sources */,
+				A4F7D9CB2701A7EE006020F9 /* FavoriteGame.xcdatamodeld in Sources */,
 				A451A3FB26F82D3600D83DE0 /* DetailViewController.swift in Sources */,
+				A4F7D9D02701A97A006020F9 /* GameProvider.swift in Sources */,
 				A451A40126F86EC100D83DE0 /* Genre.swift in Sources */,
+				A4F7D9D22701AB08006020F9 /* LocalGameModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -575,6 +653,19 @@
 			productName = SDWebImageMapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		A4F7D9C92701A7EE006020F9 /* FavoriteGame.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				A4F7D9CA2701A7EE006020F9 /* FavoriteGame.xcdatamodel */,
+			);
+			currentVersion = A4F7D9CA2701A7EE006020F9 /* FavoriteGame.xcdatamodel */;
+			path = FavoriteGame.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = A451A3B826F1CA2C00D83DE0 /* Project object */;
 }

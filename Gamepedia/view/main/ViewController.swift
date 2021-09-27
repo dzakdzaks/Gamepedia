@@ -20,7 +20,7 @@ class ViewController: UIViewController {
     
     private let dataCellIdentifier = "DataCell"
     
-    private let vm: MainViewModel = MainViewModel()
+    private let viewModel: MainViewModel = MainViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,12 +48,12 @@ class ViewController: UIViewController {
             .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
             .distinctUntilChanged()
             .subscribe(onNext: { query in
-                if self.vm.searchKey != self.searchController.searchBar.text {
-                    self.vm.searchKey = query
+                if self.viewModel.searchKey != self.searchController.searchBar.text {
+                    self.viewModel.searchKey = query
                     self.getData()
                 }
             }
-            ).disposed(by: vm.disposeBag)
+            ).disposed(by: viewModel.disposeBag)
         
         navigationItem.searchController = searchController
         
@@ -73,15 +73,15 @@ class ViewController: UIViewController {
     }
     
     private func observeState() {
-        vm.state.observe(on: MainScheduler.instance)
+        viewModel.state.observe(on: MainScheduler.instance)
             .subscribe { event in
                 guard let state = event.element else {return}
                 switch state {
                 case .loading:
-                    if self.vm.isLoadMore {
+                    if self.viewModel.isLoadMore {
                         self.footerView.startAnimating()
                     } else {
-                        self.vm.gamesSearches.removeAll()
+                        self.viewModel.gamesSearches.removeAll()
                         self.collectionView?.reloadData()
                         self.loadingIndicator.startAnimating()
                     }
@@ -89,8 +89,8 @@ class ViewController: UIViewController {
                 case .idle:
                     break
                 case .complete:
-                    if self.vm.isLoadMore {
-                        self.vm.isLoadMore = false
+                    if self.viewModel.isLoadMore {
+                        self.viewModel.isLoadMore = false
                         self.footerView.stopAnimating()
                     } else {
                         self.loadingIndicator.stopAnimating()
@@ -98,21 +98,22 @@ class ViewController: UIViewController {
                     self.collectionView?.reloadData()
                     break
                 case let .error(msg):
-                    if self.vm.isLoadMore {
-                        self.vm.isLoadMore = false
+                    if self.viewModel.isLoadMore {
+                        self.viewModel.isLoadMore = false
                         self.footerView.stopAnimating()
                     } else {
                         self.loadingIndicator.stopAnimating()
                     }
+                    self.showToast(message: msg, seconds: 2.0)
                     print(msg)
                     break
                 }
             }
-            .disposed(by: vm.disposeBag)
+            .disposed(by: viewModel.disposeBag)
     }
     
     private func getData() {
-        vm.getGames(searchKey: vm.searchKey, ordering: vm.ordering, page: String(vm.page), pageSize: vm.pageSize)
+        viewModel.getGames()
     }
     
     @objc private func showOrderByMenu(sender: UIBarButtonItem) {
@@ -127,15 +128,15 @@ class ViewController: UIViewController {
         for item in orderByList {
             if item.value == "Clear" {
                 alert.addAction(.init(title: item.value, style: .destructive) { action in
-                    self.vm.ordering = ""
-                    self.vm.page = 1
+                    self.viewModel.ordering = ""
+                    self.viewModel.page = 1
                     self.getData()
                 })
             } else {
                 alert.addAction(.init(title: item.value, style: .default) { action in
                     if let index = alert.actions.firstIndex(of: action) {
-                        self.vm.ordering = orderByList[index].key
-                        self.vm.page = 1
+                        self.viewModel.ordering = orderByList[index].key
+                        self.viewModel.page = 1
                         self.getData()
                     }
                 })
@@ -147,19 +148,32 @@ class ViewController: UIViewController {
         
         present(alert, animated: true)
     }
+    
+    func showToast(message : String, seconds: Double) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alert.view.backgroundColor = UIColor.black.withAlphaComponent(0.0)
+        alert.view.layer.cornerRadius = 15
+
+        present(alert, animated: true)
+
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + seconds) {
+            alert.dismiss(animated: true)
+        }
+    }
+    
 }
 
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        vm.gamesSearches.count
+        viewModel.gamesSearches.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: dataCellIdentifier, for: indexPath) as! GameCollectionViewCell
         
-        let game = vm.gamesSearches[indexPath.row]
+        let game = viewModel.gamesSearches[indexPath.row]
         
         cell.view.clipsToBounds = true
         cell.view.layer.cornerRadius = 10
@@ -211,18 +225,19 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let endScrolling = (scrollView.contentOffset.y + scrollView.frame.size.height)
         
-        if !vm.isLoadMore && endScrolling >= scrollView.contentSize.height {
-            vm.isLoadMore = true
-            vm.page += 1
+        if !viewModel.isLoadMore && endScrolling >= scrollView.contentSize.height {
+            viewModel.isLoadMore = true
+            viewModel.page += 1
             getData()
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        vm.selectedGameRow = indexPath.row
-        guard let vc = R.storyboard.main.detailGame() else { return }
-        vc.vm = vm
-        self.navigationController?.pushViewController(vc, animated: true)
+        viewModel.selectedGameRow = indexPath.row
+        guard let controller = R.storyboard.main.detailGame() else { return }
+        controller.viewModel = viewModel
+        controller.isFromLocal = false
+        self.navigationController?.pushViewController(controller, animated: true)
         
     }
     

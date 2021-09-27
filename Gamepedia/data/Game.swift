@@ -63,9 +63,9 @@ struct Game: Codable {
     func getReleaseDate() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        guard let _releaseDate = dateFormatter.date(from: releaseDate ?? "") else { return "-" }
+        guard let formattedReleaseDate = dateFormatter.date(from: releaseDate ?? "") else { return "-" }
         dateFormatter.dateFormat = "dd MMMM yyyy"
-        return dateFormatter.string(from: _releaseDate)
+        return dateFormatter.string(from: formattedReleaseDate)
     }
 }
 

@@ -11,10 +11,14 @@ import RxSwift
 
 class DetailViewController: UIViewController {
     
-    var vm: MainViewModel!
+    var viewModel: MainViewModel!
+    var favoriteViewModel: FavoriteViewModel!
+    
+    var isFromLocal: Bool!
     
     var game: Game!
-    
+    var favoriteGame: LocalGameModel!
+        
     private var index = -1
         
     @IBOutlet weak var scrollview: UIScrollView!
@@ -42,17 +46,21 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var constraintLabelDeveloperBottom: NSLayoutConstraint!
     @IBOutlet weak var labelPublisher: UILabel!
     @IBOutlet weak var constraintLabelPublisherBottom: NSLayoutConstraint!
+    @IBOutlet weak var buttonFavorite: UIButton!
     
     private var defaultHeightImage: CGFloat = 233
     
-    private let client = Client.client()
-    
-    private let disposeBag = DisposeBag()
+    private lazy var gameProvider: GameProvider = { return GameProvider() }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
-        callDataDetail()
+        
+        if !isFromLocal {
+            setup()
+            callDataDetail()
+        } else {
+            setupLocal()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,12 +74,21 @@ class DetailViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        let transformer = SDImageResizingTransformer(size: CGSize(width: imageGame.bounds.width * 1.5, height: imageGame.bounds.height * 1.5), scaleMode: .aspectFill)
-        
-        imageGame.sd_setImage(
-            with: game.getImageURL(),
-            placeholderImage: UIImage(systemName: "photo"),
-            context: [.imageTransformer: transformer])
+        if !isFromLocal {
+            let transformer = SDImageResizingTransformer(size: CGSize(width: imageGame.bounds.width * 1.5, height: imageGame.bounds.height * 1.5), scaleMode: .aspectFill)
+            
+            imageGame.sd_setImage(
+                with: game.getImageURL(),
+                placeholderImage: UIImage(systemName: "photo"),
+                context: [.imageTransformer: transformer])
+        } else {
+            let transformer = SDImageResizingTransformer(size: CGSize(width: imageGame.bounds.width * 1.5, height: imageGame.bounds.height * 1.5), scaleMode: .aspectFill)
+            
+            imageGame.sd_setImage(
+                with: favoriteGame.getImageURL(),
+                placeholderImage: UIImage(systemName: "photo"),
+                context: [.imageTransformer: transformer])
+        }
         
     }
     override func viewWillDisappear(_ animated: Bool) {
@@ -82,11 +99,11 @@ class DetailViewController: UIViewController {
     }
     
     private func setup() {
-        guard let indexItem = vm.selectedGameRow else {
+        guard let indexItem = viewModel.selectedGameRow else {
             return
         }
         index = indexItem
-        game = vm.gamesSearches[index]
+        game = viewModel.gamesSearches[index]
         
         navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(
             title: "", style: .plain, target: nil, action: nil)
@@ -95,6 +112,18 @@ class DetailViewController: UIViewController {
         
         defaultHeightImage = UIScreen.main.bounds.width / 2
         constraintImageHeight.constant = defaultHeightImage
+        
+        buttonFavorite.addTarget(self, action: #selector(favoriteButtonClicked(sender:)), for: .touchUpInside)
+        
+        gameProvider.isGameAlreadyFavorited(gameId: game.id) { isAlreadyFavorited in
+            DispatchQueue.main.async {
+                if isAlreadyFavorited {
+                    self.buttonFavorite.setImage(UIImage(systemName: "star.fill"), for: .normal)
+                } else {
+                    self.buttonFavorite.setImage(UIImage(systemName: "star"), for: .normal)
+                }
+            }
+        }
     }
     
     private func callDataDetail() {
@@ -107,20 +136,21 @@ class DetailViewController: UIViewController {
     
     private func callData(gameId: String) {
         indicator.startAnimating()
-        client.getGameDetail(gameId: gameId)
+        viewModel.client.getGameDetail(gameId: gameId)
             .observe(on: MainScheduler.instance)
             .subscribe(
                 onNext: { game in
-                    self.vm.gamesSearches[self.index] = game
+                    self.viewModel.gamesSearches[self.index] = game
                     self.game = game
                     self.setupData()
                 }, onError: { error in
                     self.indicator.stopAnimating()
+                    self.showToast(message: error.localizedDescription, seconds: 2.0, finishAfterRemove: false)
                     print(error)
                 }, onCompleted: {
                     self.indicator.stopAnimating()
                 }, onDisposed: nil
-            ).disposed(by: disposeBag)
+            ).disposed(by: viewModel.disposeBag)
         
     }
     
@@ -193,6 +223,106 @@ class DetailViewController: UIViewController {
         
     }
     
+    private func setupLocal() {
+        guard let indexItem = favoriteViewModel.selectedGameRow else {
+            return
+        }
+        index = indexItem
+        favoriteGame = favoriteViewModel.games[index]
+        
+        navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(
+            title: "", style: .plain, target: nil, action: nil)
+        indicator.hidesWhenStopped = true
+        scrollview.delegate = self
+        
+        defaultHeightImage = UIScreen.main.bounds.width / 2
+        constraintImageHeight.constant = defaultHeightImage
+        
+        buttonFavorite.addTarget(self, action: #selector(favoriteButtonClicked(sender:)), for: .touchUpInside)
+        
+        self.buttonFavorite.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        
+        setupDataLocal()
+    }
+    
+    private func setupDataLocal() {
+        labelName.text = favoriteGame.name
+        
+        labelRating.text = "\(String(describing: favoriteGame.rating!)) / \(String(describing: favoriteGame.ratingTop!))"
+        
+        labelDesc.text = favoriteGame.descriptionRaw
+        
+        if favoriteGame.parentPlatforms?.count ?? 0 >= favoriteGame.genres?.count ?? 0 {
+            constraintLabelGenreBottom.isActive = false
+        } else {
+            constraintLabelPlatformBottom.isActive = false
+        }
+        
+        labelPlatform.text = favoriteGame.parentPlatforms
+        
+        labelGenre.text = favoriteGame.genres
+        
+        
+        if favoriteGame.releaseDate?.count ?? 0 >= favoriteGame.esrbRating?.count ?? 0 {
+            constraintLabelAgeRatingBottom.isActive = false
+        } else {
+            constraintLabelReleaseDateBottom.isActive = false
+        }
+        
+        labelReleaseDate.text = favoriteGame.releaseDate
+        
+        labelAgeRating.text = favoriteGame.esrbRating
+        
+        if favoriteGame.developers?.count ?? 0 >= favoriteGame.publishers?.count ?? 0 {
+            constraintLabelPublisherBottom.isActive = false
+        } else {
+            constraintLabelDeveloperBottom.isActive = false
+        }
+        
+        labelDeveloper.text = favoriteGame.developers
+        
+        labelPublisher.text = favoriteGame.publishers
+    }
+    
+    private func showToast(message : String, seconds: Double, finishAfterRemove: Bool) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alert.view.backgroundColor = UIColor.black.withAlphaComponent(0.0)
+        alert.view.layer.cornerRadius = 15
+
+        present(alert, animated: true)
+
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + seconds) {
+            alert.dismiss(animated: true) {
+                if finishAfterRemove {
+                    self.navigationController?.popToRootViewController(animated: true)
+                }
+            }
+        }
+    }
+
+    @objc private func favoriteButtonClicked(sender: UIButton) {
+        gameProvider.isGameAlreadyFavorited(gameId: !isFromLocal ? game.id : Int(favoriteGame.gameId ?? 0)) { isAlreadyFavorited in
+            if isAlreadyFavorited {
+                self.gameProvider.deleteFromFavorite(!self.isFromLocal ? self.game.id : Int(self.favoriteGame.gameId ?? 0)) {
+                    DispatchQueue.main.async {
+                        sender.setImage(UIImage(systemName: "star"), for: .normal)
+                        self.showToast(message: "Removed from favorite", seconds: 1.0, finishAfterRemove: self.isFromLocal)
+                    }
+                }
+            } else {
+                if !self.isFromLocal {
+                    let localGameModel = LocalGameModel(id: 0, gameId: Int32(self.game.id), name: self.game.name, releaseDate: self.game.getReleaseDate(), backgroundImage: self.game.backgroundImage, rating: self.game.rating, ratingTop: self.game.ratingTop, parentPlatforms: self.labelPlatform.text, genres: self.labelGenre.text, esrbRating: self.labelAgeRating.text, descriptionRaw: self.game.descriptionRaw, developers: self.labelDeveloper.text, publishers: self.labelPublisher.text)
+                    self.gameProvider.addToFavorite(localGameModel) {
+                        DispatchQueue.main.async {
+                            sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
+                            self.showToast(message: "Added to favorite", seconds: 1.0, finishAfterRemove: false)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
 }
 
 extension DetailViewController: UIScrollViewDelegate {
@@ -208,7 +338,7 @@ extension DetailViewController: UIScrollViewDelegate {
         if offsetY > defaultHeightImage - 50 {
             navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
             navigationController?.navigationBar.shadowImage = nil
-            title = game.name
+            title = !isFromLocal ? game.name : favoriteGame.name
         } else {
             navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
             navigationController?.navigationBar.shadowImage = UIImage()

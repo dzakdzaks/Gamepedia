@@ -9,4 +9,5 @@ target 'Gamepedia' do
   pod 'RxSwift', '6.2.0'
   pod 'RxCocoa', '6.2.0'
   pod 'R.swift'
+  #pod 'SwiftLint'
 end

@@ -139,6 +139,20 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
+  /// This `R.file` struct is generated, and contains static references to 1 files.
+  struct file {
+    /// Resource file `API-Info.plist`.
+    static let apiInfoPlist = Rswift.FileResource(bundle: R.hostingBundle, name: "API-Info", pathExtension: "plist")
+
+    /// `bundle.url(forResource: "API-Info", withExtension: "plist")`
+    static func apiInfoPlist(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.apiInfoPlist
+      return fileResource.bundle.url(forResource: fileResource)
+    }
+
+    fileprivate init() {}
+  }
+
   /// This `R.image` struct is generated, and contains static references to 1 images.
   struct image {
     /// Image `dzakdzaks`.
@@ -256,6 +270,7 @@ struct _R: Rswift.Validatable {
         if UIKit.UIImage(named: "dzakdzaks", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: "[R.swift] Image named 'dzakdzaks' is used in storyboard 'Main', but couldn't be loaded.") }
         if #available(iOS 13.0, *) { if UIKit.UIImage(systemName: "house") == nil { throw Rswift.ValidationError(description: "[R.swift] System image named 'house' is used in storyboard 'Main', but couldn't be loaded.") } }
         if #available(iOS 13.0, *) { if UIKit.UIImage(systemName: "person.crop.circle") == nil { throw Rswift.ValidationError(description: "[R.swift] System image named 'person.crop.circle' is used in storyboard 'Main', but couldn't be loaded.") } }
+        if #available(iOS 13.0, *) { if UIKit.UIImage(systemName: "star") == nil { throw Rswift.ValidationError(description: "[R.swift] System image named 'star' is used in storyboard 'Main', but couldn't be loaded.") } }
         if #available(iOS 13.0, *) { if UIKit.UIImage(systemName: "star.fill") == nil { throw Rswift.ValidationError(description: "[R.swift] System image named 'star.fill' is used in storyboard 'Main', but couldn't be loaded.") } }
         if #available(iOS 11.0, tvOS 11.0, *) {
         }

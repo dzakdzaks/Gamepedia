@@ -21,6 +21,4 @@ class GameCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var labelRating: UILabel!
     
-    
-    
 }

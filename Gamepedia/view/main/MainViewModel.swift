@@ -13,9 +13,13 @@ enum MainState {
     case idle, loading, complete, error(msg: String)
 }
 
+enum DetailState {
+    case idle, loading, complete(game: Game), error(msg: String)
+}
+
 class MainViewModel {
     
-    private let client: Client = Client()
+    let client: Client = Client()
     let disposeBag: DisposeBag = DisposeBag()
     
     var gamesSearches: [Game] = []
@@ -32,15 +36,17 @@ class MainViewModel {
     
     let state = BehaviorRelay<MainState>(value: .idle)
     
+    let detailstate = BehaviorRelay<DetailState>(value: .idle)
+    
     init() {
-        getGames(searchKey: searchKey, ordering: ordering, page: String(page), pageSize: pageSize)
+        getGames()
     }
 
-    func getGames(searchKey: String, ordering: String, page: String, pageSize: String) {
+    func getGames() {
         
         state.accept(.loading)
         
-        client.getGames(searchKey: searchKey, ordering: ordering, page: page, pageSize: pageSize)
+        client.getGames(searchKey: searchKey, ordering: ordering, page: String(page), pageSize: pageSize)
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { games in
                 if self.isLoadMore {
@@ -58,5 +64,4 @@ class MainViewModel {
             ).disposed(by: disposeBag)
         
     }
-    
 }

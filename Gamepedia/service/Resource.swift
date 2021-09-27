@@ -7,10 +7,25 @@
 
 import Foundation
 
-let baseUrl = "https://api.rawg.io/api"
-let apiKey = "41283ebf1d7f44ca87506eb97566c2ce"
-
-
+private var apiKey: String {
+  get {
+    // 1
+    guard let filePath = Bundle.main.path(forResource: "API-Info", ofType: "plist") else {
+      fatalError("Couldn't find file 'API-Info.plist'.")
+    }
+    // 2
+    let plist = NSDictionary(contentsOfFile: filePath)
+    guard let value = plist?.object(forKey: "API_KEY") as? String else {
+      fatalError("Couldn't find key 'API_KEY' in 'API-Info.plist'.")
+    }
+    // 3
+    if (value.starts(with: "_")) {
+      fatalError("Register for a RAWG account and get an API key at https://rawg.io/apidocs")
+    }
+    return value
+  }
+}
+    
 enum Method: String {
     case GET, POST, PUT, DELETE
 }
