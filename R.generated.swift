@@ -199,10 +199,14 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.reuseIdentifier` struct is generated, and contains static references to 1 reuse identifiers.
+  /// This `R.reuseIdentifier` struct is generated, and contains static references to 3 reuse identifiers.
   struct reuseIdentifier {
     /// Reuse identifier `DataCell`.
     static let dataCell: Rswift.ReuseIdentifier<GameCollectionViewCell> = Rswift.ReuseIdentifier(identifier: "DataCell")
+    /// Reuse identifier `bannerCell`.
+    static let bannerCell: Rswift.ReuseIdentifier<BannerCell> = Rswift.ReuseIdentifier(identifier: "bannerCell")
+    /// Reuse identifier `menuCell`.
+    static let menuCell: Rswift.ReuseIdentifier<MenuCell> = Rswift.ReuseIdentifier(identifier: "menuCell")
 
     fileprivate init() {}
   }
@@ -260,10 +264,15 @@ struct _R: Rswift.Validatable {
 
       let bundle = R.hostingBundle
       let detailGame = StoryboardViewControllerResource<DetailViewController>(identifier: "DetailGame")
+      let listGame = StoryboardViewControllerResource<ViewController>(identifier: "ListGame")
       let name = "Main"
 
       func detailGame(_: Void = ()) -> DetailViewController? {
         return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: detailGame)
+      }
+
+      func listGame(_: Void = ()) -> ViewController? {
+        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: listGame)
       }
 
       static func validate() throws {
@@ -275,6 +284,7 @@ struct _R: Rswift.Validatable {
         if #available(iOS 11.0, tvOS 11.0, *) {
         }
         if _R.storyboard.main().detailGame() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'detailGame' could not be loaded from storyboard 'Main' as 'DetailViewController'.") }
+        if _R.storyboard.main().listGame() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'listGame' could not be loaded from storyboard 'Main' as 'ViewController'.") }
       }
 
       fileprivate init() {}

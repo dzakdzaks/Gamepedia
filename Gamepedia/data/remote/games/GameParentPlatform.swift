@@ -7,14 +7,14 @@
 
 import UIKit
 
-struct ParentPlatform: Codable {
+struct GameParentPlatform: Codable {
     let platform: Platform
     enum CodingKeys: String, CodingKey {
         case platform
     }
 }
 
-struct Platform: Codable {
+struct GamePlatform: Codable {
     let id: Int
     let name: String
     let slug: String

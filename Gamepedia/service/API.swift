@@ -11,6 +11,7 @@ import RxSwift
 enum API {
     case games(searchKey: String, ordering: String, page: String, pageSize: String)
     case gameDetail(gameId: String)
+    case getParentPlatforms
 }
 
 extension API: Resource {
@@ -21,6 +22,8 @@ extension API: Resource {
             return .GET
         case .gameDetail:
             return .GET
+        case .getParentPlatforms:
+            return .GET
         }
     }
     
@@ -30,6 +33,8 @@ extension API: Resource {
             return "games"
         case let .gameDetail(gameId):
             return "games/\(gameId)"
+        case .getParentPlatforms:
+            return "platforms/lists/parents"
         }
     }
     
@@ -53,6 +58,8 @@ extension API: Resource {
             return dictionary
         case .gameDetail:
             return [:]
+        case .getParentPlatforms:
+            return [:]
         }
     }
 }
@@ -64,12 +71,16 @@ extension Client {
         return Client()
     }
     
-    func getGames(searchKey: String, ordering: String, page: String, pageSize: String) -> Observable<Games> {
+    func getGames(searchKey: String, ordering: String, page: String, pageSize: String) -> Observable<GamesResponse> {
         return call(resource: API.games(searchKey: searchKey, ordering: ordering, page: page, pageSize: pageSize))
     }
     
     func getGameDetail(gameId: String) -> Observable<Game> {
         return call(resource: API.gameDetail(gameId: gameId))
+    }
+    
+    func getParentPlatforms() -> Observable<PlatformsResponse> {
+        return call(resource: API.getParentPlatforms)
     }
     
 }

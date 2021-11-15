@@ -11,16 +11,16 @@ import RxSwift
 
 class DetailViewController: UIViewController {
     
-    var viewModel: MainViewModel!
+    var viewModel: GameViewModel!
     var favoriteViewModel: FavoriteViewModel!
     
     var isFromLocal: Bool!
     
     var game: Game!
     var favoriteGame: LocalGameModel!
-        
+    
     private var index = -1
-        
+    
     @IBOutlet weak var scrollview: UIScrollView!
     @IBOutlet weak var imageGame: UIImageView!
     @IBOutlet weak var labelName: UILabel!
@@ -58,6 +58,7 @@ class DetailViewController: UIViewController {
         if !isFromLocal {
             setup()
             callDataDetail()
+            observeState()
         } else {
             setupLocal()
         }
@@ -112,7 +113,7 @@ class DetailViewController: UIViewController {
         
         defaultHeightImage = UIScreen.main.bounds.width / 2
         constraintImageHeight.constant = defaultHeightImage
-                
+        
         gameProvider.isGameAlreadyFavorited(gameId: game.id) { isAlreadyFavorited in
             DispatchQueue.main.async {
                 if isAlreadyFavorited {
@@ -133,23 +134,30 @@ class DetailViewController: UIViewController {
     }
     
     private func callData(gameId: String) {
-        indicator.startAnimating()
-        viewModel.client.getGameDetail(gameId: gameId)
-            .observe(on: MainScheduler.instance)
-            .subscribe(
-                onNext: { game in
-                    self.viewModel.gamesSearches[self.index] = game
-                    self.game = game
+        viewModel.getGameDetail(gameId: gameId)
+    }
+    
+    private func observeState() {
+        viewModel.detailstate.observe(on: MainScheduler.instance)
+            .subscribe { event in
+                guard let state = event.element else {return}
+                switch state {
+                case .loading:
+                    self.indicator.startAnimating()
+                case .idle:
+                    break
+                case let .complete(data):
+                    self.indicator.stopAnimating()
+                    self.viewModel.gamesSearches[self.index] = data
+                    self.game = data
                     self.setupData()
-                }, onError: { error in
+                case let .error(msg):
                     self.indicator.stopAnimating()
-                    self.showToast(message: error.localizedDescription, seconds: 2.0, finishAfterRemove: false)
-                    print(error)
-                }, onCompleted: {
-                    self.indicator.stopAnimating()
-                }, onDisposed: nil
-            ).disposed(by: viewModel.disposeBag)
-        
+                    self.presentToast(message: msg.localizedDescription, timeInterval: 2, finishAfterRemove: false)
+                    print(msg)
+                }
+            }
+            .disposed(by: viewModel.disposeBag)
     }
     
     private func setupData() {
@@ -177,9 +185,9 @@ class DetailViewController: UIViewController {
         let genresString = genres.joined(separator: ", ")
         
         if platformsString.count >= genresString.count {
-            constraintLabelGenreBottom.isActive = false
+            constraintLabelGenreBottom?.isActive = false
         } else {
-            constraintLabelPlatformBottom.isActive = false
+            constraintLabelPlatformBottom?.isActive = false
         }
         
         labelPlatform.text = platformsString
@@ -188,9 +196,9 @@ class DetailViewController: UIViewController {
         
         
         if game.getReleaseDate().count >= game.esrbRating?.name.count ?? 0 {
-            constraintLabelAgeRatingBottom.isActive = false
+            constraintLabelAgeRatingBottom?.isActive = false
         } else {
-            constraintLabelReleaseDateBottom.isActive = false
+            constraintLabelReleaseDateBottom?.isActive = false
         }
         
         labelReleaseDate.text = game.getReleaseDate()
@@ -212,9 +220,9 @@ class DetailViewController: UIViewController {
         let publishersString = publishers.joined(separator: ", ")
         
         if developersString.count >= publishersString.count {
-            constraintLabelPublisherBottom.isActive = false
+            constraintLabelPublisherBottom?.isActive = false
         } else {
-            constraintLabelDeveloperBottom.isActive = false
+            constraintLabelDeveloperBottom?.isActive = false
         }
         
         labelDeveloper.text = developersString
@@ -237,16 +245,16 @@ class DetailViewController: UIViewController {
         
         defaultHeightImage = UIScreen.main.bounds.width / 2
         constraintImageHeight.constant = defaultHeightImage
-                
+        
         self.buttonFavorite.setImage(UIImage(systemName: "star.fill"), for: .normal)
         
         setupDataLocal()
     }
     
     private func setupDataLocal() {
-       
+        
         buttonFavorite.addTarget(self, action: #selector(favoriteButtonClicked(sender:)), for: .touchUpInside)
-
+        
         labelName.text = favoriteGame.name
         
         labelRating.text = "\(String(describing: favoriteGame.rating!)) / \(String(describing: favoriteGame.ratingTop!))"
@@ -254,9 +262,9 @@ class DetailViewController: UIViewController {
         labelDesc.text = favoriteGame.descriptionRaw
         
         if favoriteGame.parentPlatforms?.count ?? 0 >= favoriteGame.genres?.count ?? 0 {
-            constraintLabelGenreBottom.isActive = false
+            constraintLabelGenreBottom?.isActive = false
         } else {
-            constraintLabelPlatformBottom.isActive = false
+            constraintLabelPlatformBottom?.isActive = false
         }
         
         labelPlatform.text = favoriteGame.parentPlatforms
@@ -265,9 +273,9 @@ class DetailViewController: UIViewController {
         
         
         if favoriteGame.releaseDate?.count ?? 0 >= favoriteGame.esrbRating?.count ?? 0 {
-            constraintLabelAgeRatingBottom.isActive = false
+            constraintLabelAgeRatingBottom?.isActive = false
         } else {
-            constraintLabelReleaseDateBottom.isActive = false
+            constraintLabelReleaseDateBottom?.isActive = false
         }
         
         labelReleaseDate.text = favoriteGame.releaseDate
@@ -275,9 +283,9 @@ class DetailViewController: UIViewController {
         labelAgeRating.text = favoriteGame.esrbRating
         
         if favoriteGame.developers?.count ?? 0 >= favoriteGame.publishers?.count ?? 0 {
-            constraintLabelPublisherBottom.isActive = false
+            constraintLabelPublisherBottom?.isActive = false
         } else {
-            constraintLabelDeveloperBottom.isActive = false
+            constraintLabelDeveloperBottom?.isActive = false
         }
         
         labelDeveloper.text = favoriteGame.developers
@@ -285,29 +293,40 @@ class DetailViewController: UIViewController {
         labelPublisher.text = favoriteGame.publishers
     }
     
-    private func showToast(message : String, seconds: Double, finishAfterRemove: Bool) {
-        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-        alert.view.backgroundColor = UIColor.black.withAlphaComponent(0.0)
-        alert.view.layer.cornerRadius = 15
-
-        present(alert, animated: true)
-
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + seconds) {
-            alert.dismiss(animated: true) {
-                if finishAfterRemove {
-                    self.navigationController?.popToRootViewController(animated: true)
-                }
+    //    private func showToast(message : String, seconds: Double, finishAfterRemove: Bool) {
+    //        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+    //        alert.view.backgroundColor = UIColor.black.withAlphaComponent(0.0)
+    //        alert.view.layer.cornerRadius = 15
+    //
+    //        present(alert, animated: true)
+    //
+    //        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + seconds) {
+    //            alert.dismiss(animated: true) {
+    //                if finishAfterRemove {
+    //                    self.navigationController?.popToRootViewController(animated: true)
+    //                }
+    //            }
+    //        }
+    //    }
+    
+    private func presentToast(message: String, timeInterval: TimeInterval, finishAfterRemove: Bool) {
+        let toast = ToastViewController(text: message)
+        present(toast, animated: true)
+        Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { _ in
+            toast.dismiss(animated: true)
+            if finishAfterRemove {
+                self.navigationController?.popToRootViewController(animated: true)
             }
         }
     }
-
+    
     @objc private func favoriteButtonClicked(sender: UIButton) {
         gameProvider.isGameAlreadyFavorited(gameId: !isFromLocal ? game.id : Int(favoriteGame.gameId ?? 0)) { isAlreadyFavorited in
             if isAlreadyFavorited {
                 self.gameProvider.deleteFromFavorite(!self.isFromLocal ? self.game.id : Int(self.favoriteGame.gameId ?? 0)) {
                     DispatchQueue.main.async {
                         sender.setImage(UIImage(systemName: "star"), for: .normal)
-                        self.showToast(message: "Removed from favorite", seconds: 1.0, finishAfterRemove: self.isFromLocal)
+                        self.presentToast(message: "Removed from favorite", timeInterval: 1, finishAfterRemove: self.isFromLocal)
                     }
                 }
             } else {
@@ -316,7 +335,7 @@ class DetailViewController: UIViewController {
                     self.gameProvider.addToFavorite(localGameModel) {
                         DispatchQueue.main.async {
                             sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
-                            self.showToast(message: "Added to favorite", seconds: 1.0, finishAfterRemove: false)
+                            self.presentToast(message: "Added to favorite", timeInterval: 1, finishAfterRemove: false)
                         }
                     }
                 }

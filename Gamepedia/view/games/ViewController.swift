@@ -20,7 +20,7 @@ class ViewController: UIViewController {
     
     private let dataCellIdentifier = "DataCell"
     
-    private let viewModel: MainViewModel = MainViewModel()
+    private let viewModel: GameViewModel = GameViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,8 +36,7 @@ class ViewController: UIViewController {
     
     private func setup() {
         
-        title = "Home"
-        navigationItem.title = "Gamepedia"
+        navigationItem.title = "Games"
         
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Games"

@@ -15,7 +15,7 @@ struct Game: Codable {
     let backgroundImage: String?
     let rating: Double?
     let ratingTop: Double?
-    let parentPlatforms: [ParentPlatform]?
+    let parentPlatforms: [GameParentPlatform]?
     let genres: [Genre]?
     let esrbRating: EsrbRating?
     var descriptionRaw: String?
@@ -45,7 +45,7 @@ struct Game: Codable {
         backgroundImage = (try? container.decode(String?.self, forKey: .backgroundImage))
         rating = (try? container.decode(Double?.self, forKey: .rating)) ?? 0.0
         ratingTop = (try? container.decode(Double?.self, forKey: .ratingTop)) ?? 0.0
-        parentPlatforms = (try? container.decode([ParentPlatform].self, forKey: .parentPlatforms)) ?? nil
+        parentPlatforms = (try? container.decode([GameParentPlatform].self, forKey: .parentPlatforms)) ?? nil
         genres = (try? container.decode([Genre].self, forKey: .genres)) ?? nil
         esrbRating = (try? container.decode(EsrbRating.self, forKey: .esrbRating)) ?? nil
         descriptionRaw = (try? container.decode(String?.self, forKey: .descriptionRaw)) ?? "-"
@@ -66,14 +66,5 @@ struct Game: Codable {
         guard let formattedReleaseDate = dateFormatter.date(from: releaseDate ?? "") else { return "-" }
         dateFormatter.dateFormat = "dd MMMM yyyy"
         return dateFormatter.string(from: formattedReleaseDate)
-    }
-}
-
-
-struct Games: Codable {
-    let games: [Game]
-    
-    enum CodingKeys: String, CodingKey {
-        case games = "results"
     }
 }
