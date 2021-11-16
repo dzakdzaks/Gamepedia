@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 
 enum API {
-    case games(searchKey: String, ordering: String, page: String, pageSize: String)
+    case games(searchKey: String, ordering: String, page: String, pageSize: String, platforms: String)
     case gameDetail(gameId: String)
     case getParentPlatforms
 }
@@ -40,7 +40,7 @@ extension API: Resource {
     
     var parameters: [String : String] {
         switch self {
-        case let .games(searchKey, ordering, page, pageSize):
+        case let .games(searchKey, ordering, page, pageSize, platforms):
             
             var dictionary: [String: String] = [:]
             
@@ -53,6 +53,10 @@ extension API: Resource {
             
             if !ordering.isEmpty {
                 dictionary["ordering"] = ordering
+            }
+            
+            if !platforms.isEmpty {
+                dictionary["platforms"] = platforms
             }
             
             return dictionary
@@ -71,8 +75,8 @@ extension Client {
         return Client()
     }
     
-    func getGames(searchKey: String, ordering: String, page: String, pageSize: String) -> Observable<GamesResponse> {
-        return call(resource: API.games(searchKey: searchKey, ordering: ordering, page: page, pageSize: pageSize))
+    func getGames(searchKey: String, ordering: String, page: String, pageSize: String, platforms: String) -> Observable<GamesResponse> {
+        return call(resource: API.games(searchKey: searchKey, ordering: ordering, page: page, pageSize: pageSize, platforms: platforms))
     }
     
     func getGameDetail(gameId: String) -> Observable<Game> {

@@ -19,6 +19,8 @@ class GameViewModel {
     var searchKey: String = ""
     var ordering: String = ""
     var page: Int = 1
+    var platformId: String = ""
+    var platformName: String = ""
     
     var selectedGameRow: Int? = nil
     
@@ -30,7 +32,9 @@ class GameViewModel {
     
     let detailstate = BehaviorRelay<ResultState<Game>>(value: .idle)
     
-    init() {
+    init(platformId: String = "", platformName: String = "") {
+        self.platformId = platformId
+        self.platformName = platformName
         getGames()
     }
 
@@ -38,7 +42,7 @@ class GameViewModel {
         
         state.accept(.loading)
         
-        client.getGames(searchKey: searchKey, ordering: ordering, page: String(page), pageSize: pageSize)
+        client.getGames(searchKey: searchKey, ordering: ordering, page: String(page), pageSize: pageSize, platforms: platformId)
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { data in
                 if self.isLoadMore {

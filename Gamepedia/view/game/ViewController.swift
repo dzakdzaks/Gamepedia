@@ -20,7 +20,7 @@ class ViewController: UIViewController {
     
     private let dataCellIdentifier = "DataCell"
     
-    private let viewModel: GameViewModel = GameViewModel()
+    var viewModel: GameViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +36,11 @@ class ViewController: UIViewController {
     
     private func setup() {
         
-        navigationItem.title = "Games"
+        if viewModel.platformName.isEmpty {
+            navigationItem.title = "Games"
+        } else {
+            navigationItem.title = "\(viewModel.platformName) Games"
+        }
         
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Games"

@@ -41,7 +41,7 @@ final class Client {
             
             
             let task = self.session.dataTask(with: resource.request()) { data, response, error in
-                
+                print("wakwaw \(resource.request().url)")
                 guard let response = response, let data = data else {
                     observer.on(.error(error ?? RxCocoaURLError.unknown))
                     return

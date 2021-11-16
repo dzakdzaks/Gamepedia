@@ -44,10 +44,6 @@ extension HomeViewController {
         
     }
     
-}
-
-extension HomeViewController {
-    
     private func changeCollectionHeight() {
         menuViewHeight.constant = menuView.contentSize.height
     }
@@ -75,7 +71,6 @@ extension HomeViewController {
             }.disposed(by: viewModel.disposeBag)
     }
     
-    
 }
 
 extension HomeViewController: UICollectionViewDataSource {
@@ -94,14 +89,14 @@ extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if collectionView.tag == 0 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "bannerCell", for: indexPath) as! BannerCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "bannerCell", for: indexPath) as! SimpleCell
             let parentPlatform = viewModel.parentPlatforms[indexPath.row]
-            cell.setBanner(for: parentPlatform)
+            cell.setBannerRounded(for: parentPlatform)
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "menuCell", for: indexPath) as! MenuCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "menuCell", for: indexPath) as! SimpleCell
             let homeMenu = viewModel.homeMenus[indexPath.row]
-            cell.setMenu(menu: homeMenu)
+            cell.setHomeMenu(for: homeMenu)
             return cell
         }
     }
@@ -136,14 +131,18 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        bannerIndicator?.currentPage = Int(scrollView.contentOffset.x) / Int(scrollView.frame.width)
+        if scrollView.tag == 0 {
+            bannerIndicator?.currentPage = Int(scrollView.contentOffset.x) / Int(scrollView.frame.width)
+        }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let witdh = scrollView.frame.width - (scrollView.contentInset.left*2)
-        let index = scrollView.contentOffset.x / witdh
-        let roundedIndex = round(index)
-        bannerIndicator?.currentPage = Int(roundedIndex)
+        if scrollView.tag == 0 {
+            let witdh = scrollView.frame.width - (scrollView.contentInset.left*2)
+            let index = scrollView.contentOffset.x / witdh
+            let roundedIndex = round(index)
+            bannerIndicator?.currentPage = Int(roundedIndex)
+        }
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
@@ -152,12 +151,16 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView.tag == 0 {
-            
+            guard let controller = R.storyboard.main.platform() else { return }
+            controller.viewModel = PlatformViewModel(platformParent: viewModel.parentPlatforms)
+            navigationController?.pushViewController(controller, animated: true)
         } else {
             let homeMenu = viewModel.homeMenus[indexPath.row]
             switch homeMenu.id {
             case 1:
                 guard let controller = R.storyboard.main.listGame() else { return }
+                let vm = GameViewModel()
+                controller.viewModel = vm
                 navigationController?.pushViewController(controller, animated: true)
                 break
             case 2:

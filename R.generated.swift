@@ -199,14 +199,18 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.reuseIdentifier` struct is generated, and contains static references to 3 reuse identifiers.
+  /// This `R.reuseIdentifier` struct is generated, and contains static references to 5 reuse identifiers.
   struct reuseIdentifier {
     /// Reuse identifier `DataCell`.
     static let dataCell: Rswift.ReuseIdentifier<GameCollectionViewCell> = Rswift.ReuseIdentifier(identifier: "DataCell")
     /// Reuse identifier `bannerCell`.
-    static let bannerCell: Rswift.ReuseIdentifier<BannerCell> = Rswift.ReuseIdentifier(identifier: "bannerCell")
+    static let bannerCell: Rswift.ReuseIdentifier<SimpleCell> = Rswift.ReuseIdentifier(identifier: "bannerCell")
     /// Reuse identifier `menuCell`.
-    static let menuCell: Rswift.ReuseIdentifier<MenuCell> = Rswift.ReuseIdentifier(identifier: "menuCell")
+    static let menuCell: Rswift.ReuseIdentifier<SimpleCell> = Rswift.ReuseIdentifier(identifier: "menuCell")
+    /// Reuse identifier `parentPlatformCell`.
+    static let parentPlatformCell: Rswift.ReuseIdentifier<PlatformParentCell> = Rswift.ReuseIdentifier(identifier: "parentPlatformCell")
+    /// Reuse identifier `platformCell`.
+    static let platformCell: Rswift.ReuseIdentifier<SimpleCell> = Rswift.ReuseIdentifier(identifier: "platformCell")
 
     fileprivate init() {}
   }
@@ -266,6 +270,7 @@ struct _R: Rswift.Validatable {
       let detailGame = StoryboardViewControllerResource<DetailViewController>(identifier: "DetailGame")
       let listGame = StoryboardViewControllerResource<ViewController>(identifier: "ListGame")
       let name = "Main"
+      let platform = StoryboardViewControllerResource<PlatformViewController>(identifier: "platform")
 
       func detailGame(_: Void = ()) -> DetailViewController? {
         return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: detailGame)
@@ -273,6 +278,10 @@ struct _R: Rswift.Validatable {
 
       func listGame(_: Void = ()) -> ViewController? {
         return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: listGame)
+      }
+
+      func platform(_: Void = ()) -> PlatformViewController? {
+        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: platform)
       }
 
       static func validate() throws {
@@ -285,6 +294,7 @@ struct _R: Rswift.Validatable {
         }
         if _R.storyboard.main().detailGame() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'detailGame' could not be loaded from storyboard 'Main' as 'DetailViewController'.") }
         if _R.storyboard.main().listGame() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'listGame' could not be loaded from storyboard 'Main' as 'ViewController'.") }
+        if _R.storyboard.main().platform() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'platform' could not be loaded from storyboard 'Main' as 'PlatformViewController'.") }
       }
 
       fileprivate init() {}

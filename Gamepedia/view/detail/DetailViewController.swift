@@ -157,7 +157,7 @@ class DetailViewController: UIViewController {
                     print(msg)
                 }
             }
-            .disposed(by: viewModel.disposeBag)
+        .disposed(by: viewModel.disposeBag)
     }
     
     private func setupData() {
