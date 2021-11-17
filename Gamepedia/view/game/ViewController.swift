@@ -36,10 +36,17 @@ class ViewController: UIViewController {
     
     private func setup() {
         
-        if viewModel.platformName.isEmpty {
+        if (viewModel.platform?.name ?? "").isEmpty {
             navigationItem.title = "Games"
+            let orderByButton = UIBarButtonItem(title: "Order by", style: .plain, target: self, action: #selector(showOrderByMenu(sender:)))
+            navigationItem.rightBarButtonItems = [orderByButton]
         } else {
-            navigationItem.title = "\(viewModel.platformName) Games"
+            navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(
+                title: "", style: .plain, target: nil, action: nil)
+            navigationItem.title = "\(viewModel.platform?.name ?? "") Games"
+            let infoButton = UIBarButtonItem(image: UIImage(systemName: "exclamationmark.circle"), style: .plain, target: self, action: #selector(showDetail(sender:)))
+            let orderByButton = UIBarButtonItem(title: "Order by", style: .plain, target: self, action: #selector(showOrderByMenu(sender:)))
+            navigationItem.rightBarButtonItems = [infoButton, orderByButton]
         }
         
         navigationItem.largeTitleDisplayMode = .automatic
@@ -64,9 +71,6 @@ class ViewController: UIViewController {
         navigationItem.hidesSearchBarWhenScrolling = false
         
         definesPresentationContext = true
-        
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Order by", style: .plain, target: self, action: #selector(showOrderByMenu(sender:)))
         
         collectionView?.delegate = self
         collectionView?.dataSource = self
@@ -165,6 +169,16 @@ class ViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + seconds) {
             alert.dismiss(animated: true)
         }
+    }
+    
+    @objc private func showDetail(sender: UIBarButtonItem) {
+        let title = viewModel.platform?.name ?? "Info"
+        let msg = viewModel.platform?.description.htmlToString ?? "No Info"
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "Back", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true, completion: nil)
     }
     
 }

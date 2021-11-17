@@ -46,7 +46,8 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var constraintLabelDeveloperBottom: NSLayoutConstraint!
     @IBOutlet weak var labelPublisher: UILabel!
     @IBOutlet weak var constraintLabelPublisherBottom: NSLayoutConstraint!
-    @IBOutlet weak var buttonFavorite: UIButton!
+    @IBOutlet weak var segmentedGallery: UISegmentedControl!
+    
     
     private var defaultHeightImage: CGFloat = 233
     
@@ -55,6 +56,9 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(
+            title: "", style: .plain, target: nil, action: nil)
+        
         if !isFromLocal {
             setup()
             callDataDetail()
@@ -62,6 +66,7 @@ class DetailViewController: UIViewController {
         } else {
             setupLocal()
         }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -101,20 +106,18 @@ class DetailViewController: UIViewController {
         index = indexItem
         game = viewModel.gamesSearches[index]
         
-        navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(
-            title: "", style: .plain, target: nil, action: nil)
         indicator.hidesWhenStopped = true
         scrollview.delegate = self
         
-        defaultHeightImage = UIScreen.main.bounds.width / 2
+        defaultHeightImage = UIScreen.main.bounds.height / 2
         constraintImageHeight.constant = defaultHeightImage
         
         gameProvider.isGameAlreadyFavorited(gameId: game.id) { isAlreadyFavorited in
             DispatchQueue.main.async {
                 if isAlreadyFavorited {
-                    self.buttonFavorite.setImage(UIImage(systemName: "star.fill"), for: .normal)
+                    self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "star.fill"), style: .plain, target: self, action: #selector(self.favoriteButtonClicked(sender:)))
                 } else {
-                    self.buttonFavorite.setImage(UIImage(systemName: "star"), for: .normal)
+                    self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "star"), style: .plain, target: self, action: #selector(self.favoriteButtonClicked(sender:)))
                 }
             }
         }
@@ -152,12 +155,10 @@ class DetailViewController: UIViewController {
                     print(msg)
                 }
             }
-        .disposed(by: viewModel.disposeBag)
+            .disposed(by: viewModel.disposeBag)
     }
     
     private func setupData() {
-        
-        buttonFavorite.addTarget(self, action: #selector(favoriteButtonClicked(sender:)), for: .touchUpInside)
         
         labelName.text = game.name
         
@@ -233,22 +234,19 @@ class DetailViewController: UIViewController {
         index = indexItem
         favoriteGame = favoriteViewModel.games[index]
         
-        navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(
-            title: "", style: .plain, target: nil, action: nil)
         indicator.hidesWhenStopped = true
         scrollview.delegate = self
         
         defaultHeightImage = UIScreen.main.bounds.width / 2
         constraintImageHeight.constant = defaultHeightImage
         
-        self.buttonFavorite.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "star.fill"), style: .plain, target: self, action: #selector(self.favoriteButtonClicked(sender:)))
         
         setupDataLocal()
     }
     
     private func setupDataLocal() {
         
-        buttonFavorite.addTarget(self, action: #selector(favoriteButtonClicked(sender:)), for: .touchUpInside)
         
         labelName.text = favoriteGame.name
         
@@ -315,12 +313,12 @@ class DetailViewController: UIViewController {
         }
     }
     
-    @objc private func favoriteButtonClicked(sender: UIButton) {
+    @objc private func favoriteButtonClicked(sender: UIBarButtonItem) {
         gameProvider.isGameAlreadyFavorited(gameId: !isFromLocal ? game.id : Int(favoriteGame.gameId ?? 0)) { isAlreadyFavorited in
             if isAlreadyFavorited {
                 self.gameProvider.deleteFromFavorite(!self.isFromLocal ? self.game.id : Int(self.favoriteGame.gameId ?? 0)) {
                     DispatchQueue.main.async {
-                        sender.setImage(UIImage(systemName: "star"), for: .normal)
+                        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "star"), style: .plain, target: self, action: #selector(self.favoriteButtonClicked(sender:)))
                         self.presentToast(message: "Removed from favorite", timeInterval: 1, finishAfterRemove: self.isFromLocal)
                     }
                 }
@@ -329,13 +327,26 @@ class DetailViewController: UIViewController {
                     let localGameModel = LocalGameModel(id: 0, gameId: Int32(self.game.id), name: self.game.name, releaseDate: self.game.getReleaseDate(), backgroundImage: self.game.backgroundImage, rating: self.game.rating, ratingTop: self.game.ratingTop, parentPlatforms: self.labelPlatform.text, genres: self.labelGenre.text, esrbRating: self.labelAgeRating.text, descriptionRaw: self.game.descriptionRaw, developers: self.labelDeveloper.text, publishers: self.labelPublisher.text)
                     self.gameProvider.addToFavorite(localGameModel) {
                         DispatchQueue.main.async {
-                            sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
+                            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "star.fill"), style: .plain, target: self, action: #selector(self.favoriteButtonClicked(sender:)))
                             self.presentToast(message: "Added to favorite", timeInterval: 1, finishAfterRemove: false)
                         }
                     }
                 }
             }
         }
+    }
+    
+    @IBAction func segmentedRequirementChanged(_ sender: UISegmentedControl) {
+        
+        switch sender.selectedSegmentIndex {
+        case 0:
+            break
+        case 1:
+            break
+        default:
+            break
+        }
+        
     }
     
 }

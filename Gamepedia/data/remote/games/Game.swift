@@ -18,9 +18,9 @@ struct Game: Codable {
     let parentPlatforms: [GameParentPlatform]?
     let genres: [Genre]?
     let esrbRating: EsrbRating?
-    var descriptionRaw: String?
-    var developers: [Developer]?
-    var publishers: [Publisher]?
+    let descriptionRaw: String?
+    let developers: [Developer]?
+    let publishers: [Publisher]?
     
     enum CodingKeys: String, CodingKey {
         case id

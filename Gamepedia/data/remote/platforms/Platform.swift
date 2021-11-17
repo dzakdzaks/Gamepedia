@@ -14,6 +14,7 @@ struct Platform: Codable {
     let slug: String
     let gamesCount: Int
     let imageBackground: String
+    let description: String
     let image: String
     let yearStart: Int
     let yearEnd: Int
@@ -24,6 +25,7 @@ struct Platform: Codable {
         case slug
         case gamesCount = "games_count"
         case imageBackground = "image_background"
+        case description
         case image
         case yearStart = "year_start"
         case yearEnd = "year_end"
@@ -36,6 +38,7 @@ struct Platform: Codable {
         slug = (try? container.decode(String.self, forKey: .slug)) ?? ""
         gamesCount = (try? container.decode(Int.self, forKey: .gamesCount)) ?? 0
         imageBackground = (try? container.decode(String.self, forKey: .imageBackground)) ?? ""
+        description = (try? container.decode(String.self, forKey: .description)) ?? "-"
         image = (try? container.decode(String.self, forKey: .image)) ?? ""
         yearStart = (try? container.decode(Int.self, forKey: .yearStart)) ?? 0
         yearEnd = (try? container.decode(Int.self, forKey: .yearEnd)) ?? 0

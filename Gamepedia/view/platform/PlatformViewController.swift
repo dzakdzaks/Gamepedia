@@ -130,7 +130,7 @@ extension PlatformViewController: UICollectionViewDelegate, UICollectionViewDele
         if collectionView.tag == 0 {
             return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         } else {
-            return UIEdgeInsets(top: 0, left: 10, bottom: 10, right: 0)
+            return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         }
     }
     
@@ -189,7 +189,7 @@ extension PlatformViewController: UICollectionViewDelegate, UICollectionViewDele
         if collectionView.tag == 1 {
             let data = viewModel.platform[indexPath.row]
             guard let controller = R.storyboard.main.listGame() else { return }
-            let vm = GameViewModel(platformId: String(data.id), platformName: data.name)
+            let vm = GameViewModel(platform: data)
             controller.viewModel = vm
             navigationController?.pushViewController(controller, animated: true)
         }

@@ -159,7 +159,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
             switch homeMenu.id {
             case 1:
                 guard let controller = R.storyboard.main.listGame() else { return }
-                let vm = GameViewModel()
+                let vm = GameViewModel(platform: nil)
                 controller.viewModel = vm
                 navigationController?.pushViewController(controller, animated: true)
                 break

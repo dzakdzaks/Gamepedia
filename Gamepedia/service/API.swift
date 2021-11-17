@@ -12,6 +12,7 @@ enum API {
     case games(searchKey: String, ordering: String, page: String, pageSize: String, platforms: String)
     case gameDetail(gameId: String)
     case getParentPlatforms
+    case getParentPlatformDetail(id: String)
 }
 
 extension API: Resource {
@@ -24,6 +25,8 @@ extension API: Resource {
             return .GET
         case .getParentPlatforms:
             return .GET
+        case .getParentPlatformDetail:
+            return .GET
         }
     }
     
@@ -35,6 +38,8 @@ extension API: Resource {
             return "games/\(gameId)"
         case .getParentPlatforms:
             return "platforms/lists/parents"
+        case let .getParentPlatformDetail(id):
+            return "platforms/\(id)"
         }
     }
     
@@ -55,7 +60,7 @@ extension API: Resource {
                 dictionary["ordering"] = ordering
             }
             
-            if !platforms.isEmpty {
+            if !platforms.isEmpty && platforms != "0" {
                 dictionary["platforms"] = platforms
             }
             
@@ -63,6 +68,8 @@ extension API: Resource {
         case .gameDetail:
             return [:]
         case .getParentPlatforms:
+            return [:]
+        case .getParentPlatformDetail:
             return [:]
         }
     }
@@ -85,6 +92,10 @@ extension Client {
     
     func getParentPlatforms() -> Observable<PlatformsResponse> {
         return call(resource: API.getParentPlatforms)
+    }
+    
+    func getParentPlatformDetail(id: String) -> Observable<Platform> {
+        return call(resource: API.getParentPlatformDetail(id: id))
     }
     
 }

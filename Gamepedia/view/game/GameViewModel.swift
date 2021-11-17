@@ -19,8 +19,7 @@ class GameViewModel {
     var searchKey: String = ""
     var ordering: String = ""
     var page: Int = 1
-    var platformId: String = ""
-    var platformName: String = ""
+    var platform: Platform?
     
     var selectedGameRow: Int? = nil
     
@@ -32,17 +31,19 @@ class GameViewModel {
     
     let detailstate = BehaviorRelay<ResultState<Game>>(value: .idle)
     
-    init(platformId: String = "", platformName: String = "") {
-        self.platformId = platformId
-        self.platformName = platformName
+    let detailPlatformState = BehaviorRelay<LoadState>(value: .idle)
+    
+    init(platform: Platform?) {
+        self.platform = platform
+        getPlatformDetail(id: String(self.platform?.id ?? 0))
         getGames()
     }
 
     func getGames() {
         
         state.accept(.loading)
-        
-        client.getGames(searchKey: searchKey, ordering: ordering, page: String(page), pageSize: pageSize, platforms: platformId)
+                        
+        client.getGames(searchKey: searchKey, ordering: ordering, page: String(page), pageSize: pageSize, platforms: String(platform?.id ?? 0))
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { data in
                 if self.isLoadMore {
@@ -73,6 +74,21 @@ class GameViewModel {
                     self.detailstate.accept(.error(msg: error.localizedDescription))
                 }, onCompleted: {
                     self.detailstate.accept(.idle)
+                }, onDisposed: nil
+            ).disposed(by: disposeBag)
+    }
+    
+    func getPlatformDetail(id: String) {
+        detailPlatformState.accept(.loading)
+        client.getParentPlatformDetail(id: id)
+            .observe(on: MainScheduler.instance)
+            .subscribe(
+                onNext: { data in
+                    self.platform = data
+                }, onError: { error in
+                    self.detailPlatformState.accept(.error(msg: error.localizedDescription))
+                }, onCompleted: {
+                    self.detailPlatformState.accept(.idle)
                 }, onDisposed: nil
             ).disposed(by: disposeBag)
     }
