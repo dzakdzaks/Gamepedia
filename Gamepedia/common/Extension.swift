@@ -37,3 +37,20 @@ extension UICollectionView {
     }
     
 }
+
+
+extension UINavigationController {
+    
+    func defaultNavigation() {
+        navigationBar.setBackgroundImage(.none, for: .default)
+        navigationBar.shadowImage = .none
+        navigationBar.backgroundColor = .none
+    }
+    
+    func transparentNavigation() {
+        navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationBar.shadowImage = UIImage()
+        navigationBar.isTranslucent = true
+    }
+    
+}

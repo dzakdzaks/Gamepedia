@@ -65,11 +65,8 @@ class DetailViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        navigationController?.transparentNavigation()
         super.viewWillAppear(animated)
-        // Make the navigation bar background clear
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.isTranslucent = true
     }
     
     override func viewDidLayoutSubviews() {
@@ -93,10 +90,8 @@ class DetailViewController: UIViewController {
         
     }
     override func viewWillDisappear(_ animated: Bool) {
+        navigationController?.defaultNavigation()
         super.viewWillDisappear(animated)
-        // Restore the navigation bar to default
-        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
-        navigationController?.navigationBar.shadowImage = nil
     }
     
     private func setup() {
@@ -356,13 +351,10 @@ extension DetailViewController: UIScrollViewDelegate {
         }
         
         if offsetY > defaultHeightImage - 50 {
-            navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
-            navigationController?.navigationBar.shadowImage = nil
+            navigationController?.defaultNavigation()
             title = !isFromLocal ? game.name : favoriteGame.name
         } else {
-            navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-            navigationController?.navigationBar.shadowImage = UIImage()
-            navigationController?.navigationBar.isTranslucent = true
+            navigationController?.transparentNavigation()
             title = ""
         }
         

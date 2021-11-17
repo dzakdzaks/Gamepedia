@@ -42,6 +42,8 @@ class ViewController: UIViewController {
             navigationItem.title = "\(viewModel.platformName) Games"
         }
         
+        navigationItem.largeTitleDisplayMode = .automatic
+        
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Games"
         
@@ -59,6 +61,7 @@ class ViewController: UIViewController {
             ).disposed(by: viewModel.disposeBag)
         
         navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
         
         definesPresentationContext = true
         

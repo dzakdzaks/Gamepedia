@@ -32,17 +32,13 @@ class PlatformViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        navigationController?.transparentNavigation()
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.isTranslucent = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        navigationController?.defaultNavigation()
         super.viewWillDisappear(animated)
-        // Restore the navigation bar to default
-        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
-        navigationController?.navigationBar.shadowImage = nil
     }
     
     override func viewDidLayoutSubviews() {
@@ -70,6 +66,16 @@ extension PlatformViewController {
     private func observeState() {
         viewModel.onSelectedItem.observe(on: MainScheduler.instance)
             .subscribe { event in
+                guard let state = event.element else {return}
+                
+                switch state {
+                case let .defaultInit(selected):
+                    self.platformParentCollection?.scrollToItem(at: IndexPath(item: selected, section: 0), at: .centeredHorizontally, animated: true)
+                case .dragged:
+                    break
+                default:
+                    break
+                }
                 self.platformCollection?.reloadData()
             }.disposed(by: viewModel.disposeBag)
     }
@@ -166,12 +172,9 @@ extension PlatformViewController: UICollectionViewDelegate, UICollectionViewDele
             }
             
             if offsetY > defaultPlatformParentImage - 50 {
-                navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
-                navigationController?.navigationBar.shadowImage = nil
+                navigationController?.defaultNavigation()
             } else {
-                navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-                navigationController?.navigationBar.shadowImage = UIImage()
-                navigationController?.navigationBar.isTranslucent = true
+                navigationController?.transparentNavigation()
             }
         }
     }

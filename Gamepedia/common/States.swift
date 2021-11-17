@@ -14,3 +14,7 @@ enum LoadState {
 enum ResultState<T: Any> {
     case idle, loading, complete(data: T), error(msg: String)
 }
+
+enum BannerState {
+    case idle, defaultInit(selected: Int), dragged
+}

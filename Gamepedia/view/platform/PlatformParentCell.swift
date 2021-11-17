@@ -32,17 +32,4 @@ class PlatformParentCell: UICollectionViewCell {
             placeholderImage: UIImage(systemName: "photo"))
     }
     
-    func setPlatform(for platform: Platform) {
-        view.clipsToBounds = true
-        view.layer.cornerRadius = 10
-        
-        title.text = platform.name
-        title.clipsToBounds = true
-        title.layer.cornerRadius = 10
-        
-        image.sd_setImage(
-            with: URL(string: platform.imageBackground),
-            placeholderImage: UIImage(systemName: "photo"))
-        
-    }
 }

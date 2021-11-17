@@ -152,7 +152,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView.tag == 0 {
             guard let controller = R.storyboard.main.platform() else { return }
-            controller.viewModel = PlatformViewModel(platformParent: viewModel.parentPlatforms)
+            controller.viewModel = PlatformViewModel(platformParent: viewModel.parentPlatforms, selectedPlatformParent: indexPath.row)
             navigationController?.pushViewController(controller, animated: true)
         } else {
             let homeMenu = viewModel.homeMenus[indexPath.row]
